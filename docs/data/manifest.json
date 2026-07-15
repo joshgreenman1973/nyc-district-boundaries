@@ -11,7 +11,8 @@
     "authority": "NYC Dept. of City Planning",
     "actual_count": 5,
     "file": "data/borough.json",
-    "size_kb": 335.6
+    "size_kb": 335.6,
+    "default": true
   },
   {
     "key": "community_board",
@@ -25,7 +26,8 @@
     "authority": "NYC Dept. of City Planning",
     "actual_count": 71,
     "file": "data/community_board.json",
-    "size_kb": 446.3
+    "size_kb": 446.3,
+    "default": true
   },
   {
     "key": "council",
@@ -40,7 +42,8 @@
     "authority": "NYC City Council / DCP",
     "actual_count": 51,
     "file": "data/council.json",
-    "size_kb": 446.1
+    "size_kb": 446.1,
+    "default": true
   },
   {
     "key": "school",
@@ -55,7 +58,8 @@
     "authority": "NYC Dept. of Education / DCP",
     "actual_count": 33,
     "file": "data/school.json",
-    "size_kb": 440.9
+    "size_kb": 440.9,
+    "default": true
   },
   {
     "key": "police",
@@ -70,7 +74,8 @@
     "authority": "NYPD / DCP",
     "actual_count": 78,
     "file": "data/police.json",
-    "size_kb": 446.2
+    "size_kb": 446.2,
+    "default": true
   },
   {
     "key": "fire_battalion",
@@ -85,7 +90,8 @@
     "authority": "FDNY / DCP",
     "actual_count": 49,
     "file": "data/fire_battalion.json",
-    "size_kb": 460.0
+    "size_kb": 460.0,
+    "default": true
   },
   {
     "key": "fire_division",
@@ -100,7 +106,8 @@
     "authority": "FDNY / DCP",
     "actual_count": 9,
     "file": "data/fire_division.json",
-    "size_kb": 372.1
+    "size_kb": 372.1,
+    "default": false
   },
   {
     "key": "fire_company",
@@ -114,7 +121,8 @@
     "authority": "FDNY / DCP",
     "actual_count": 348,
     "file": "data/fire_company.json",
-    "size_kb": 477.2
+    "size_kb": 477.2,
+    "default": false
   },
   {
     "key": "sanitation",
@@ -128,7 +136,8 @@
     "authority": "NYC Dept. of Sanitation",
     "actual_count": 59,
     "file": "data/sanitation.json",
-    "size_kb": 297.6
+    "size_kb": 297.6,
+    "default": true
   },
   {
     "key": "health_center",
@@ -143,7 +152,8 @@
     "authority": "NYC Dept. of Health / DCP",
     "actual_count": 30,
     "file": "data/health_center.json",
-    "size_kb": 390.0
+    "size_kb": 390.0,
+    "default": false
   },
   {
     "key": "health_area",
@@ -158,7 +168,8 @@
     "authority": "NYC Dept. of Health / DCP",
     "actual_count": 354,
     "file": "data/health_area.json",
-    "size_kb": 332.2
+    "size_kb": 332.2,
+    "default": false
   },
   {
     "key": "bid",
@@ -172,7 +183,8 @@
     "authority": "NYC Dept. of Small Business Services",
     "actual_count": 76,
     "file": "data/bid.json",
-    "size_kb": 336.4
+    "size_kb": 336.4,
+    "default": false
   },
   {
     "key": "assembly",
@@ -187,7 +199,8 @@
     "authority": "NYS / DCP",
     "actual_count": 65,
     "file": "data/assembly.json",
-    "size_kb": 474.8
+    "size_kb": 474.8,
+    "default": true
   },
   {
     "key": "senate",
@@ -202,7 +215,8 @@
     "authority": "NYS / DCP",
     "actual_count": 28,
     "file": "data/senate.json",
-    "size_kb": 420.1
+    "size_kb": 420.1,
+    "default": true
   },
   {
     "key": "congress",
@@ -217,7 +231,8 @@
     "authority": "US Census / DCP",
     "actual_count": 13,
     "file": "data/congress.json",
-    "size_kb": 381.2
+    "size_kb": 381.2,
+    "default": true
   },
   {
     "key": "election",
@@ -231,7 +246,8 @@
     "authority": "NYC Board of Elections / DCP",
     "actual_count": 4214,
     "file": "data/election.json",
-    "size_kb": 1246.7
+    "size_kb": 1246.7,
+    "default": false
   },
   {
     "key": "nta",
@@ -245,7 +261,8 @@
     "authority": "NYC Dept. of City Planning",
     "actual_count": 262,
     "file": "data/nta.json",
-    "size_kb": 449.7
+    "size_kb": 449.7,
+    "default": false
   },
   {
     "key": "cdta",
@@ -259,7 +276,8 @@
     "authority": "NYC Dept. of City Planning",
     "actual_count": 71,
     "file": "data/cdta.json",
-    "size_kb": 454.5
+    "size_kb": 454.5,
+    "default": false
   },
   {
     "key": "census_tract",
@@ -273,7 +291,8 @@
     "authority": "US Census Bureau / DCP",
     "actual_count": 2325,
     "file": "data/census_tract.json",
-    "size_kb": 751.4
+    "size_kb": 751.4,
+    "default": false
   },
   {
     "key": "zcta",
@@ -288,7 +307,8 @@
     "authority": "US Census Bureau",
     "actual_count": 221,
     "file": "data/zcta.json",
-    "size_kb": 172.7
+    "size_kb": 172.7,
+    "default": false
   },
   {
     "key": "historic",
@@ -302,6 +322,7 @@
     "authority": "NYC Landmarks Preservation Commission",
     "actual_count": 141,
     "file": "data/historic.json",
-    "size_kb": 109.9
+    "size_kb": 109.9,
+    "default": false
   }
 ]

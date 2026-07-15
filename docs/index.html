@@ -148,7 +148,7 @@
     #panel{width:100%;min-width:0;height:auto;max-height:52vh;border-right:none;border-bottom:1.5px solid var(--ink)}
     #map{flex:1}
     #count{left:14px;top:auto;bottom:20px}
-    #legend{bottom:64px}
+    #legend{display:none}
     h1{font-size:22px}
     #result{right:0;left:0;top:auto;bottom:0;width:100%;max-width:100%;
       border-radius:6px 6px 0 0;max-height:56vh}
@@ -161,14 +161,15 @@
     <div class="phead">
       <p class="kicker">New York City · overlapping jurisdictions</p>
       <h1>The overlapping city</h1>
-      <p class="sub">One patch of sidewalk sits inside a dozen different districts at once. Toggle any set of boundaries below — or find one exact spot.</p>
+      <p class="sub">One patch of sidewalk sits inside a dozen different districts at once. It opens with the city's main districts layered on — toggle any set below, or find one exact spot.</p>
       <div class="searchwrap">
         <input id="search" type="text" autocomplete="off" spellcheck="false" placeholder="Search an address, or click the map…" />
         <div class="ac" id="ac"></div>
       </div>
       <p class="hint">Every district that spot falls in appears in a results card.</p>
       <div class="controls">
-        <button class="btn" id="clear">Clear all</button>
+        <button class="btn" id="showall">Show all</button>
+        <button class="btn" id="hideall">Hide all</button>
         <button class="btn" id="fit">Reset view</button>
         <button class="btn caution" id="cbtn">AI caution</button>
       </div>
@@ -243,11 +244,11 @@ function tip(layerName,nm){
   return `<span class="tl">${layerName}</span>${nm||'—'}`;
 }
 
-async function toggle(layer,row){
+async function toggle(layer,row,silent){
   const key = layer.key;
   if(active[key]){
     map.removeLayer(active[key]); delete active[key];
-    row.classList.remove('on'); updateHUD(); refreshHighlights(); updateHash(); return;
+    row.classList.remove('on'); updateHUD(); refreshHighlights(); if(!silent) updateHash(); return;
   }
   row.classList.add('on');
   let gj = cache[key];
@@ -268,7 +269,7 @@ async function toggle(layer,row){
       l.on('mouseout',()=>l.setStyle(layerStyle(layer.color)));
     }
   }).addTo(map);
-  active[key]=lyr; updateHUD(); updateHash();
+  active[key]=lyr; updateHUD(); if(!silent) updateHash();
 }
 
 function updateHUD(){
@@ -302,14 +303,23 @@ fetch('data/manifest.json').then(r=>r.json()).then(m=>{
       root.appendChild(row);
     });
   });
-  restoreFromHash();
+  // a shared link (any #hash) wins; a clean load shows the default set
+  if(location.hash.replace(/^#/,'')) restoreFromHash();
+  else applyDefaults();
 });
 
+function applyDefaults(){
+  LAYERS.filter(l=>l.default).forEach(l=>{ const r=panelRow(l.key); if(r && !active[l.key]) toggle(l,r,true); });
+}
+
 // ---- controls ----
-document.getElementById('clear').onclick=()=>{
+document.getElementById('hideall').onclick=()=>{
   Object.keys(active).forEach(k=>{map.removeLayer(active[k]);delete active[k];});
   document.querySelectorAll('.row.on').forEach(r=>r.classList.remove('on'));
   updateHUD(); refreshHighlights(); updateHash();
+};
+document.getElementById('showall').onclick=()=>{
+  LAYERS.forEach(l=>{ const r=panelRow(l.key); if(r && !active[l.key]) toggle(l,r); });
 };
 document.getElementById('fit').onclick=()=>{ if(HOME) map.fitBounds(HOME,{padding:[24,24]}); };
 const cModal=document.getElementById('caution');
@@ -401,7 +411,8 @@ async function selectResult(key){
 
 function refreshHighlights(focusKey){
   if(hlLayer){ map.removeLayer(hlLayer); hlLayer=null; }
-  const key = focusKey || Object.keys(containing).find(k=>active[k]);
+  // auto-pick a neighborhood-scale district, not the whole borough
+  const key = focusKey || Object.keys(containing).find(k=>active[k] && k!=='borough');
   if(!key || !containing[key]) return;
   const layer=LAYERS.find(l=>l.key===key);
   hlLayer=L.geoJSON(containing[key],{pane:'hl',interactive:false,
