@@ -21,6 +21,8 @@ An interactive map of **every significant district boundary in New York City** â
 - **Data:** official GeoJSON from [NYC Open Data](https://opendata.cityofnewyork.us/), mostly published by the Dept. of City Planning. Full source table on the [methodology page](https://joshgreenman1973.github.io/nyc-district-boundaries/methodology.html).
 - **Base map:** boroughs are drawn as the "land"; there are no external map tiles, so the map is self-contained and loads instantly.
 - **Rendering:** Leaflet. Each layer loads lazily on first toggle and draws as a distinct colored outline.
+- **Pinpoint lookup:** search any address (NYC City Planning GeoSearch autocomplete, free, no key) or click the map; a card lists every district that spot falls into, with a copy-as-text button.
+- **Shareable links:** active layers and the dropped pin live in the URL hash (`#l=council,police&p=40.748,-73.985`), so any view can be shared as a link.
 - Geometry is simplified for speed and labels are generated from source codes â€” treat exact edges as approximate.
 
 ## Rebuild

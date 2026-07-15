@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>The overlapping city — every district boundary in New York</title>
 <meta name="description" content="An interactive map of every significant district boundary in New York City — community boards, council, police precincts, school districts and more — that you can overlay and compare." />
+<meta property="og:title" content="The overlapping city — every district boundary in New York" />
+<meta property="og:description" content="Overlay 21 kinds of NYC district boundaries, search any address or drop a pin, and see every district that spot sits in." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://joshgreenman1973.github.io/nyc-district-boundaries/" />
+<meta name="theme-color" content="#f5f1e8" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23f5f1e8'/%3E%3Cpath d='M6 6h20v20H6z' fill='none' stroke='%231b1a17' stroke-width='2'/%3E%3Cpath d='M6 14h20M14 6v20M14 14L26 26' stroke='%237a1f2b' stroke-width='2'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -73,7 +79,7 @@
     box-shadow:0 1px 4px rgba(0,0,0,.1)}
   .chip i{width:16px;height:0;border-top-width:3px;border-top-style:solid;display:inline-block}
 
-  #count{position:absolute;left:390px;top:14px;z-index:1000;background:var(--panel);
+  #count{position:absolute;left:434px;top:14px;z-index:1000;background:var(--panel);
     border:1.3px solid var(--ink);border-radius:2px;padding:6px 12px;
     font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.02em}
   #count b{color:var(--accent)}
@@ -119,6 +125,11 @@
   .rhead .rc{font-family:"Space Mono",monospace;font-size:10px;color:var(--ink-soft);margin:4px 0 0}
   .rclose{position:absolute;top:10px;right:11px;cursor:pointer;font-size:17px;line-height:1;color:var(--ink-soft);border:none;background:none;padding:2px}
   .rclose:hover{color:var(--accent)}
+  .rcopy{font-family:"Space Mono",monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+    background:none;border:1.2px solid var(--ink-soft);color:var(--ink-soft);border-radius:2px;
+    padding:3px 8px;cursor:pointer;margin-top:8px;transition:.14s}
+  .rcopy:hover{border-color:var(--ink);color:var(--ink)}
+  .rcopy.did{border-color:#1f8f6f;color:#1f8f6f}
   .rlist{overflow-y:auto;padding:4px 0 8px}
   .rgroup{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
     color:var(--ink-soft);padding:11px 15px 3px}
@@ -155,7 +166,7 @@
         <input id="search" type="text" autocomplete="off" spellcheck="false" placeholder="Search an address, or click the map…" />
         <div class="ac" id="ac"></div>
       </div>
-      <p class="hint">Every district that spot falls in appears at right.</p>
+      <p class="hint">Every district that spot falls in appears in a results card.</p>
       <div class="controls">
         <button class="btn" id="clear">Clear all</button>
         <button class="btn" id="fit">Reset view</button>
@@ -176,6 +187,7 @@
       <p class="rk">This spot sits inside</p>
       <p class="ra" id="raddr">—</p>
       <p class="rc" id="rcoord"></p>
+      <button class="rcopy" id="rcopy">Copy list</button>
     </div>
     <div class="rlist" id="rlist"></div>
   </div>
@@ -208,7 +220,13 @@ function baseStyle(){ return {color:'#c9c2ae',weight:1,fill:true,fillColor:'#faf
 
 // ---- load base boroughs as the "land" ----
 let HOME=null;
-function fitHome(){ if(HOME){ map.invalidateSize(); map.fitBounds(HOME,{padding:[24,24]}); } }
+function fitHome(){
+  if(!HOME) return;
+  map.invalidateSize();
+  // a pin restored from a shared link owns the view; otherwise fit the city
+  if(curPt) map.setView([curPt.lat,curPt.lng],13,{animate:false});
+  else map.fitBounds(HOME,{padding:[24,24]});
+}
 fetch('data/borough.json').then(r=>r.json()).then(gj=>{
   L.geoJSON(gj,{pane:'base',style:baseStyle,interactive:false}).addTo(map);
   HOME = L.geoJSON(gj).getBounds();
@@ -229,7 +247,7 @@ async function toggle(layer,row){
   const key = layer.key;
   if(active[key]){
     map.removeLayer(active[key]); delete active[key];
-    row.classList.remove('on'); updateHUD(); return;
+    row.classList.remove('on'); updateHUD(); refreshHighlights(); updateHash(); return;
   }
   row.classList.add('on');
   let gj = cache[key];
@@ -250,7 +268,7 @@ async function toggle(layer,row){
       l.on('mouseout',()=>l.setStyle(layerStyle(layer.color)));
     }
   }).addTo(map);
-  active[key]=lyr; updateHUD();
+  active[key]=lyr; updateHUD(); updateHash();
 }
 
 function updateHUD(){
@@ -284,13 +302,14 @@ fetch('data/manifest.json').then(r=>r.json()).then(m=>{
       root.appendChild(row);
     });
   });
+  restoreFromHash();
 });
 
 // ---- controls ----
 document.getElementById('clear').onclick=()=>{
   Object.keys(active).forEach(k=>{map.removeLayer(active[k]);delete active[k];});
   document.querySelectorAll('.row.on').forEach(r=>r.classList.remove('on'));
-  updateHUD();
+  updateHUD(); refreshHighlights(); updateHash();
 };
 document.getElementById('fit').onclick=()=>{ if(HOME) map.fitBounds(HOME,{padding:[24,24]}); };
 const cModal=document.getElementById('caution');
@@ -326,7 +345,7 @@ function ensureLoaded(layer){
 function panelRow(key){ return document.querySelector('.row[data-key="'+key+'"]'); }
 
 async function setPoint(lng,lat,label){
-  curPt={lng,lat,label}; const seq=++ptSeq;
+  curPt={lng,lat,label}; const seq=++ptSeq; updateHash();
   if(pin){ pin.setLatLng([lat,lng]); } else {
     const ico=L.divIcon({className:'',iconSize:[26,34],iconAnchor:[13,32],html:
       '<svg class="pin-ico" width="26" height="34" viewBox="0 0 26 34" xmlns="http://www.w3.org/2000/svg">'+
@@ -334,6 +353,7 @@ async function setPoint(lng,lat,label){
       '<circle cx="13" cy="12" r="4.6" fill="#f5f1e8"/></svg>'});
     pin=L.marker([lat,lng],{icon:ico,keyboard:false,pane:'markerPane'}).addTo(map);
   }
+  map.invalidateSize();
   if(map.getZoom()<12) map.setView([lat,lng],13,{animate:true}); else map.panTo([lat,lng],{animate:true});
   // result card
   document.getElementById('raddr').textContent = label || 'Dropped pin';
@@ -393,9 +413,59 @@ function clearPin(){
   if(pin){ map.removeLayer(pin); pin=null; }
   if(hlLayer){ map.removeLayer(hlLayer); hlLayer=null; }
   document.getElementById('result').classList.remove('show');
+  updateHash();
 }
 document.getElementById('rclose').onclick=clearPin;
 map.on('click',e=>setPoint(e.latlng.lng,e.latlng.lat));
+
+/* ---- copy the district list as plain text ---- */
+document.getElementById('rcopy').onclick=()=>{
+  if(!curPt) return;
+  const lines=[(curPt.label||'Dropped pin')+' ('+curPt.lat.toFixed(5)+', '+curPt.lng.toFixed(5)+')'];
+  LAYERS.forEach(l=>{
+    const hit=containing[l.key];
+    if(hit) lines.push(l.name+': '+(hit.properties.nm||'—'));
+  });
+  const text=lines.join('\n');
+  const done=()=>{
+    const b=document.getElementById('rcopy');
+    b.textContent='Copied'; b.classList.add('did');
+    setTimeout(()=>{b.textContent='Copy list'; b.classList.remove('did');},1400);
+  };
+  const fallback=()=>{
+    const ta=document.createElement('textarea'); ta.value=text;
+    ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta);
+    ta.select(); try{ document.execCommand('copy'); done(); }catch(e){} ta.remove();
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done,fallback);
+  } else fallback();
+};
+
+/* ---- shareable URL state (#l=layers&p=lat,lng&n=label) ---- */
+function updateHash(){
+  const parts=[];
+  const keys=LAYERS.filter(l=>active[l.key]).map(l=>l.key);
+  if(keys.length) parts.push('l='+keys.join(','));
+  if(curPt){
+    parts.push('p='+curPt.lat.toFixed(5)+','+curPt.lng.toFixed(5));
+    if(curPt.label) parts.push('n='+encodeURIComponent(curPt.label));
+  }
+  history.replaceState(null,'',parts.length?('#'+parts.join('&')):location.pathname+location.search);
+}
+function restoreFromHash(){
+  const h=location.hash.replace(/^#/,'');
+  if(!h) return;
+  const q=new URLSearchParams(h);
+  (q.get('l')||'').split(',').filter(Boolean).forEach(k=>{
+    const l=LAYERS.find(x=>x.key===k), r=panelRow(k);
+    if(l&&r&&!active[k]) toggle(l,r);
+  });
+  const p=(q.get('p')||'').split(',').map(Number);
+  if(p.length===2&&isFinite(p[0])&&isFinite(p[1])) setPoint(p[1],p[0],q.get('n')||null);
+}
+// a share link pasted into an already-open tab fires hashchange, not a load
+window.addEventListener('hashchange',()=>{ if(LAYERS.length) restoreFromHash(); });
 
 /* ============ address autocomplete (NYC GeoSearch) ============ */
 const searchEl=document.getElementById('search'), acEl=document.getElementById('ac');

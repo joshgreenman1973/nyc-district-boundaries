@@ -114,7 +114,7 @@
     "authority": "FDNY / DCP",
     "actual_count": 348,
     "file": "data/fire_company.json",
-    "size_kb": 475.5
+    "size_kb": 477.2
   },
   {
     "key": "sanitation",
@@ -226,13 +226,12 @@
     "name": "Election districts",
     "count": 4517,
     "label_field": "elect_dist",
-    "label_kind": "prefix",
-    "label_prefix": "ED ",
+    "label_kind": "election",
     "color": "#5a5a8f",
     "authority": "NYC Board of Elections / DCP",
     "actual_count": 4214,
     "file": "data/election.json",
-    "size_kb": 1222.5
+    "size_kb": 1246.7
   },
   {
     "key": "nta",

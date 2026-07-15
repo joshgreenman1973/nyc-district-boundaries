@@ -61,11 +61,18 @@ def make_label(layer, props):
         except Exception:
             return str(v)
     if kind == "fire_company":
-        t = props.get("fire_co_type") or ""
+        t = {"E": "Engine", "L": "Ladder", "Q": "Squad"}.get(props.get("fire_co_type"), props.get("fire_co_type") or "")
         n = props.get("fire_co_num") or ""
         try: n = str(int(float(n)))
         except Exception: pass
-        return f"{str(t).title()} {n}".strip()
+        return f"{t} {n}".strip()
+    if kind == "election":
+        # elect_dist like 23001 = Assembly District 23, Election District 1
+        try:
+            s = str(int(float(v))).zfill(5)
+            return f"AD {int(s[:2])} · ED {int(s[2:])}"
+        except Exception:
+            return str(v)
     if kind == "prefix":
         try: v = str(int(float(v)))
         except Exception: v = str(v)
