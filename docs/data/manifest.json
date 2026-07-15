@@ -12,7 +12,8 @@
     "actual_count": 5,
     "file": "data/borough.json",
     "size_kb": 335.6,
-    "default": true
+    "default": true,
+    "desc": "New York City's five boroughs \u2014 Manhattan, the Bronx, Brooklyn, Queens and Staten Island \u2014 each also a state county."
   },
   {
     "key": "community_board",
@@ -27,7 +28,8 @@
     "actual_count": 71,
     "file": "data/community_board.json",
     "size_kb": 446.3,
-    "default": true
+    "default": true,
+    "desc": "59 local areas, each with an appointed community board that weighs in on land use, the budget and city services."
   },
   {
     "key": "council",
@@ -43,7 +45,8 @@
     "actual_count": 51,
     "file": "data/council.json",
     "size_kb": 446.1,
-    "default": true
+    "default": true,
+    "desc": "The 51 districts that each elect a member of the City Council, the city's lawmaking body."
   },
   {
     "key": "school",
@@ -59,7 +62,8 @@
     "actual_count": 33,
     "file": "data/school.json",
     "size_kb": 440.9,
-    "default": true
+    "default": true,
+    "desc": "32 districts that group the city's public elementary and middle schools, run by the Dept. of Education."
   },
   {
     "key": "police",
@@ -75,7 +79,8 @@
     "actual_count": 78,
     "file": "data/police.json",
     "size_kb": 446.2,
-    "default": true
+    "default": true,
+    "desc": "The 77 NYPD patrol areas, each with its own station house and commanding officer."
   },
   {
     "key": "fire_battalion",
@@ -91,7 +96,8 @@
     "actual_count": 49,
     "file": "data/fire_battalion.json",
     "size_kb": 460.0,
-    "default": true
+    "default": true,
+    "desc": "FDNY operational areas, each overseeing a cluster of nearby fire companies."
   },
   {
     "key": "fire_division",
@@ -107,7 +113,8 @@
     "actual_count": 9,
     "file": "data/fire_division.json",
     "size_kb": 372.1,
-    "default": false
+    "default": false,
+    "desc": "FDNY's largest operational areas; each division contains several battalions."
   },
   {
     "key": "fire_company",
@@ -122,7 +129,8 @@
     "actual_count": 348,
     "file": "data/fire_company.json",
     "size_kb": 477.2,
-    "default": false
+    "default": false,
+    "desc": "The response area of a single FDNY engine, ladder or squad company."
   },
   {
     "key": "sanitation",
@@ -137,7 +145,8 @@
     "actual_count": 59,
     "file": "data/sanitation.json",
     "size_kb": 297.6,
-    "default": true
+    "default": true,
+    "desc": "Areas the Dept. of Sanitation uses for collection, plowing and street cleaning; they mirror the community districts."
   },
   {
     "key": "health_center",
@@ -153,7 +162,8 @@
     "actual_count": 30,
     "file": "data/health_center.json",
     "size_kb": 390.0,
-    "default": false
+    "default": false,
+    "desc": "Areas the Health Dept. uses to report neighborhood health statistics; each groups several health areas."
   },
   {
     "key": "health_area",
@@ -169,7 +179,8 @@
     "actual_count": 354,
     "file": "data/health_area.json",
     "size_kb": 332.2,
-    "default": false
+    "default": false,
+    "desc": "The Health Dept.'s smallest units for tallying vital statistics like births and deaths."
   },
   {
     "key": "bid",
@@ -184,7 +195,8 @@
     "actual_count": 76,
     "file": "data/bid.json",
     "size_kb": 336.4,
-    "default": false
+    "default": false,
+    "desc": "Commercial zones where property owners tax themselves to fund extra sanitation, security and marketing."
   },
   {
     "key": "assembly",
@@ -200,7 +212,8 @@
     "actual_count": 65,
     "file": "data/assembly.json",
     "size_kb": 474.8,
-    "default": true
+    "default": true,
+    "desc": "Each elects one member of the New York State Assembly, the lower house in Albany."
   },
   {
     "key": "senate",
@@ -216,7 +229,8 @@
     "actual_count": 28,
     "file": "data/senate.json",
     "size_kb": 420.1,
-    "default": true
+    "default": true,
+    "desc": "Each elects one member of the New York State Senate, the upper house in Albany."
   },
   {
     "key": "congress",
@@ -232,7 +246,8 @@
     "actual_count": 13,
     "file": "data/congress.json",
     "size_kb": 381.2,
-    "default": true
+    "default": true,
+    "desc": "Each elects one member of the U.S. House of Representatives."
   },
   {
     "key": "election",
@@ -247,7 +262,8 @@
     "actual_count": 4214,
     "file": "data/election.json",
     "size_kb": 1246.7,
-    "default": false
+    "default": false,
+    "desc": "The smallest voting unit; each is assigned a poll site and nests inside a State Assembly district."
   },
   {
     "key": "nta",
@@ -262,7 +278,8 @@
     "actual_count": 262,
     "file": "data/nta.json",
     "size_kb": 449.7,
-    "default": false
+    "default": false,
+    "desc": "Statistical \"neighborhoods\" the City Planning Dept. built from census tracts to report population data."
   },
   {
     "key": "cdta",
@@ -277,7 +294,8 @@
     "actual_count": 71,
     "file": "data/cdta.json",
     "size_kb": 454.5,
-    "default": false
+    "default": false,
+    "desc": "Census-tract groupings that approximate the 59 community districts for reporting census data."
   },
   {
     "key": "census_tract",
@@ -292,7 +310,8 @@
     "actual_count": 2325,
     "file": "data/census_tract.json",
     "size_kb": 751.4,
-    "default": false
+    "default": false,
+    "desc": "Small, stable areas the U.S. Census Bureau uses to report demographic data."
   },
   {
     "key": "zcta",
@@ -308,7 +327,8 @@
     "actual_count": 221,
     "file": "data/zcta.json",
     "size_kb": 172.7,
-    "default": false
+    "default": false,
+    "desc": "The Census Bureau's mapped approximations of USPS ZIP codes."
   },
   {
     "key": "historic",
@@ -323,6 +343,7 @@
     "actual_count": 141,
     "file": "data/historic.json",
     "size_kb": 109.9,
-    "default": false
+    "default": false,
+    "desc": "Areas designated by the Landmarks Preservation Commission, where exterior building changes need approval."
   }
 ]

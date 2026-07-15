@@ -95,6 +95,18 @@
   .card .btn{border-color:#eef1f6;color:#eef1f6;background:transparent;margin-top:4px}
   .card .btn:hover{background:#eef1f6;color:var(--accent-navy)}
 
+  /* ---------- layer description tooltip ---------- */
+  #rowtip{position:fixed;z-index:1500;max-width:272px;background:var(--panel);
+    border:1.4px solid var(--ink);border-left-width:4px;border-radius:2px;
+    padding:9px 12px;font-size:12px;line-height:1.45;color:var(--ink);
+    box-shadow:0 8px 26px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:opacity .12s}
+  #rowtip.show{opacity:1}
+  #rowtip .tt-n{font-weight:600;display:block;margin-bottom:3px}
+  .row .info{flex:0 0 14px;width:14px;height:14px;border:1.3px solid #cbc4b0;border-radius:50%;
+    color:#cbc4b0;font-family:"Fraunces",serif;font-style:italic;font-size:10px;line-height:12px;
+    text-align:center;margin-left:2px}
+  .row:hover .info{border-color:var(--accent);color:var(--accent)}
+
   /* ---------- search ---------- */
   .searchwrap{position:relative;margin-top:14px}
   #search{width:100%;font-family:"Space Grotesk",sans-serif;font-size:13.5px;
@@ -192,6 +204,7 @@
     </div>
     <div class="rlist" id="rlist"></div>
   </div>
+  <div id="rowtip"></div>
 </div>
 
 <div id="caution">
@@ -298,8 +311,13 @@ fetch('data/manifest.json').then(r=>r.json()).then(m=>{
       row.innerHTML=`<span class="box"></span>`+
         `<span class="swatch" style="border-top-color:${l.color}"></span>`+
         `<span class="nm">${l.name}</span>`+
-        `<span class="ct">${(l.actual_count||l.count).toLocaleString()}</span>`;
+        `<span class="ct">${(l.actual_count||l.count).toLocaleString()}</span>`+
+        (l.desc?`<span class="info">i</span>`:``);
       row.addEventListener('click',()=>toggle(l,row));
+      if(l.desc){
+        row.addEventListener('mouseenter',()=>showRowTip(row,l));
+        row.addEventListener('mouseleave',hideRowTip);
+      }
       root.appendChild(row);
     });
   });
@@ -311,6 +329,23 @@ fetch('data/manifest.json').then(r=>r.json()).then(m=>{
 function applyDefaults(){
   LAYERS.filter(l=>l.default).forEach(l=>{ const r=panelRow(l.key); if(r && !active[l.key]) toggle(l,r,true); });
 }
+
+/* ---- layer description tooltip (panel hover) ---- */
+const rowtip=document.getElementById('rowtip');
+function showRowTip(row,l){
+  if(window.innerWidth<=760) return;               // hover-only; skip on touch layout
+  rowtip.innerHTML=`<span class="tt-n">${l.name}</span>${l.desc}`;
+  rowtip.style.borderLeftColor=l.color;
+  rowtip.classList.add('show');                    // render so we can measure height
+  const pr=document.getElementById('panel').getBoundingClientRect();
+  const rr=row.getBoundingClientRect();
+  rowtip.style.left=Math.round(pr.right+8)+'px';
+  const th=rowtip.offsetHeight;
+  let top=rr.top+rr.height/2-th/2;                  // vertically centered on the row
+  top=Math.max(8,Math.min(top,window.innerHeight-8-th));
+  rowtip.style.top=Math.round(top)+'px';
+}
+function hideRowTip(){ rowtip.classList.remove('show'); }
 
 // ---- controls ----
 document.getElementById('hideall').onclick=()=>{
