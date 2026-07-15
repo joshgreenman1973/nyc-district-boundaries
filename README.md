@@ -1,6 +1,6 @@
 # The overlapping city
 
-An interactive map of **every significant district boundary in New York City** — 21 layers, 8,503 individual district polygons — that you can overlay and compare. One patch of sidewalk sits inside a community board, a City Council district, a police precinct, a fire battalion, a school district, three legislative districts and more, all at once; this tool lets you switch any combination on and off and see where they cut across each other.
+An interactive map of **every significant district boundary in New York City** — 23 layers, 8,529 individual district polygons — that you can overlay and compare. One patch of sidewalk sits inside a community board, a City Council district, a police precinct, a fire battalion, a school district, three legislative districts and more, all at once; this tool lets you switch any combination on and off and see where they cut across each other.
 
 **Live map:** https://joshgreenman1973.github.io/nyc-district-boundaries/
 
@@ -11,7 +11,8 @@ An interactive map of **every significant district boundary in New York City** �
 | Foundational | Borough boundaries |
 | City government | Community districts / boards, City Council districts, Community school districts |
 | Public safety | Police precincts, Fire battalions, Fire divisions, Fire companies |
-| City services | Sanitation districts, Health center districts, Health areas, Business improvement districts |
+| City services | Sanitation districts, Health center districts, Health areas, Business improvement districts, Commercial waste zones |
+| Emergency | Hurricane evacuation zones |
 | State & federal | State Assembly, State Senate, Congressional, Election districts |
 | Statistical & neighborhood | Neighborhood tabulation areas, Community district tabulation areas, Census tracts (2020), ZIP code tabulation areas |
 | Preservation | Historic districts |

@@ -9,11 +9,11 @@
     "label_kind": "raw",
     "color": "#111111",
     "authority": "NYC Dept. of City Planning",
+    "default": true,
+    "desc": "New York City's five boroughs \u2014 Manhattan, the Bronx, Brooklyn, Queens and Staten Island \u2014 each also a state county.",
     "actual_count": 5,
     "file": "data/borough.json",
-    "size_kb": 335.6,
-    "default": true,
-    "desc": "New York City's five boroughs \u2014 Manhattan, the Bronx, Brooklyn, Queens and Staten Island \u2014 each also a state county."
+    "size_kb": 335.6
   },
   {
     "key": "community_board",
@@ -25,11 +25,11 @@
     "label_kind": "community_board",
     "color": "#e8544b",
     "authority": "NYC Dept. of City Planning",
+    "default": true,
+    "desc": "59 local areas, each with an appointed community board that weighs in on land use, the budget and city services.",
     "actual_count": 71,
     "file": "data/community_board.json",
-    "size_kb": 446.3,
-    "default": true,
-    "desc": "59 local areas, each with an appointed community board that weighs in on land use, the budget and city services."
+    "size_kb": 446.3
   },
   {
     "key": "council",
@@ -42,11 +42,11 @@
     "label_prefix": "Council District ",
     "color": "#2f6bd6",
     "authority": "NYC City Council / DCP",
+    "default": true,
+    "desc": "The 51 districts that each elect a member of the City Council, the city's lawmaking body.",
     "actual_count": 51,
     "file": "data/council.json",
-    "size_kb": 446.1,
-    "default": true,
-    "desc": "The 51 districts that each elect a member of the City Council, the city's lawmaking body."
+    "size_kb": 446.1
   },
   {
     "key": "school",
@@ -59,11 +59,11 @@
     "label_prefix": "School District ",
     "color": "#7b4bd6",
     "authority": "NYC Dept. of Education / DCP",
+    "default": true,
+    "desc": "32 districts that group the city's public elementary and middle schools, run by the Dept. of Education.",
     "actual_count": 33,
     "file": "data/school.json",
-    "size_kb": 440.9,
-    "default": true,
-    "desc": "32 districts that group the city's public elementary and middle schools, run by the Dept. of Education."
+    "size_kb": 440.9
   },
   {
     "key": "police",
@@ -76,11 +76,11 @@
     "label_prefix": "Precinct ",
     "color": "#1f8f6f",
     "authority": "NYPD / DCP",
+    "default": true,
+    "desc": "The 77 NYPD patrol areas, each with its own station house and commanding officer.",
     "actual_count": 78,
     "file": "data/police.json",
-    "size_kb": 446.2,
-    "default": true,
-    "desc": "The 77 NYPD patrol areas, each with its own station house and commanding officer."
+    "size_kb": 446.2
   },
   {
     "key": "fire_battalion",
@@ -93,11 +93,11 @@
     "label_prefix": "Battalion ",
     "color": "#d98324",
     "authority": "FDNY / DCP",
+    "default": true,
+    "desc": "FDNY operational areas, each overseeing a cluster of nearby fire companies.",
     "actual_count": 49,
     "file": "data/fire_battalion.json",
-    "size_kb": 460.0,
-    "default": true,
-    "desc": "FDNY operational areas, each overseeing a cluster of nearby fire companies."
+    "size_kb": 460.0
   },
   {
     "key": "fire_division",
@@ -110,11 +110,11 @@
     "label_prefix": "Division ",
     "color": "#b5651d",
     "authority": "FDNY / DCP",
+    "default": false,
+    "desc": "FDNY's largest operational areas; each division contains several battalions.",
     "actual_count": 9,
     "file": "data/fire_division.json",
-    "size_kb": 372.1,
-    "default": false,
-    "desc": "FDNY's largest operational areas; each division contains several battalions."
+    "size_kb": 372.1
   },
   {
     "key": "fire_company",
@@ -126,11 +126,11 @@
     "label_kind": "fire_company",
     "color": "#8a5a2b",
     "authority": "FDNY / DCP",
+    "default": false,
+    "desc": "The response area of a single FDNY engine, ladder or squad company.",
     "actual_count": 348,
     "file": "data/fire_company.json",
-    "size_kb": 477.2,
-    "default": false,
-    "desc": "The response area of a single FDNY engine, ladder or squad company."
+    "size_kb": 477.2
   },
   {
     "key": "sanitation",
@@ -142,11 +142,11 @@
     "label_kind": "raw",
     "color": "#3d8b3d",
     "authority": "NYC Dept. of Sanitation",
+    "default": true,
+    "desc": "Areas the Dept. of Sanitation uses for collection, plowing and street cleaning; they mirror the community districts.",
     "actual_count": 59,
     "file": "data/sanitation.json",
-    "size_kb": 297.6,
-    "default": true,
-    "desc": "Areas the Dept. of Sanitation uses for collection, plowing and street cleaning; they mirror the community districts."
+    "size_kb": 297.6
   },
   {
     "key": "health_center",
@@ -159,11 +159,11 @@
     "label_prefix": "Health Center District ",
     "color": "#c2417f",
     "authority": "NYC Dept. of Health / DCP",
+    "default": false,
+    "desc": "Areas the Health Dept. uses to report neighborhood health statistics; each groups several health areas.",
     "actual_count": 30,
     "file": "data/health_center.json",
-    "size_kb": 390.0,
-    "default": false,
-    "desc": "Areas the Health Dept. uses to report neighborhood health statistics; each groups several health areas."
+    "size_kb": 390.0
   },
   {
     "key": "health_area",
@@ -176,11 +176,11 @@
     "label_prefix": "Health Area ",
     "color": "#a83264",
     "authority": "NYC Dept. of Health / DCP",
+    "default": false,
+    "desc": "The Health Dept.'s smallest units for tallying vital statistics like births and deaths.",
     "actual_count": 354,
     "file": "data/health_area.json",
-    "size_kb": 332.2,
-    "default": false,
-    "desc": "The Health Dept.'s smallest units for tallying vital statistics like births and deaths."
+    "size_kb": 332.2
   },
   {
     "key": "bid",
@@ -192,11 +192,44 @@
     "label_kind": "raw",
     "color": "#c9a227",
     "authority": "NYC Dept. of Small Business Services",
+    "default": false,
+    "desc": "Commercial zones where property owners tax themselves to fund extra sanitation, security and marketing.",
     "actual_count": 76,
     "file": "data/bid.json",
-    "size_kb": 336.4,
+    "size_kb": 336.4
+  },
+  {
+    "key": "commercial_waste",
+    "id": "8ev8-jjxq",
+    "group": "City services",
+    "name": "Commercial waste zones",
+    "count": 20,
+    "label_field": "zone_name",
+    "label_kind": "raw",
+    "color": "#c026d3",
+    "authority": "NYC Dept. of Sanitation",
     "default": false,
-    "desc": "Commercial zones where property owners tax themselves to fund extra sanitation, security and marketing."
+    "desc": "20 districts created by the city's 2019 commercial-waste-zone law; in each, only a few city-selected private carters may haul businesses' trash.",
+    "actual_count": 20,
+    "file": "data/commercial_waste.json",
+    "size_kb": 344.8
+  },
+  {
+    "key": "hurricane_evac",
+    "id": "epne-qv9x",
+    "group": "Emergency",
+    "name": "Hurricane evacuation zones",
+    "count": 6,
+    "label_field": "hurricane_",
+    "label_kind": "prefix",
+    "label_prefix": "Evacuation Zone ",
+    "color": "#00a2c7",
+    "authority": "NYC Emergency Management / DCP",
+    "default": false,
+    "desc": "The city's six storm-surge evacuation zones, from 1 (highest risk) to 6; they set the order of evacuations before a hurricane.",
+    "actual_count": 6,
+    "file": "data/hurricane_evac.json",
+    "size_kb": 543.1
   },
   {
     "key": "assembly",
@@ -209,11 +242,11 @@
     "label_prefix": "Assembly District ",
     "color": "#4c6ef5",
     "authority": "NYS / DCP",
+    "default": true,
+    "desc": "Each elects one member of the New York State Assembly, the lower house in Albany.",
     "actual_count": 65,
     "file": "data/assembly.json",
-    "size_kb": 474.8,
-    "default": true,
-    "desc": "Each elects one member of the New York State Assembly, the lower house in Albany."
+    "size_kb": 474.8
   },
   {
     "key": "senate",
@@ -226,11 +259,11 @@
     "label_prefix": "Senate District ",
     "color": "#1c4fb3",
     "authority": "NYS / DCP",
+    "default": true,
+    "desc": "Each elects one member of the New York State Senate, the upper house in Albany.",
     "actual_count": 28,
     "file": "data/senate.json",
-    "size_kb": 420.1,
-    "default": true,
-    "desc": "Each elects one member of the New York State Senate, the upper house in Albany."
+    "size_kb": 420.1
   },
   {
     "key": "congress",
@@ -243,11 +276,11 @@
     "label_prefix": "Congressional District ",
     "color": "#12306b",
     "authority": "US Census / DCP",
+    "default": true,
+    "desc": "Each elects one member of the U.S. House of Representatives.",
     "actual_count": 13,
     "file": "data/congress.json",
-    "size_kb": 381.2,
-    "default": true,
-    "desc": "Each elects one member of the U.S. House of Representatives."
+    "size_kb": 381.2
   },
   {
     "key": "election",
@@ -259,11 +292,11 @@
     "label_kind": "election",
     "color": "#5a5a8f",
     "authority": "NYC Board of Elections / DCP",
+    "default": false,
+    "desc": "The smallest voting unit; each is assigned a poll site and nests inside a State Assembly district.",
     "actual_count": 4214,
     "file": "data/election.json",
-    "size_kb": 1246.7,
-    "default": false,
-    "desc": "The smallest voting unit; each is assigned a poll site and nests inside a State Assembly district."
+    "size_kb": 1246.7
   },
   {
     "key": "nta",
@@ -275,11 +308,11 @@
     "label_kind": "raw",
     "color": "#0f8a8a",
     "authority": "NYC Dept. of City Planning",
+    "default": false,
+    "desc": "Statistical \"neighborhoods\" the City Planning Dept. built from census tracts to report population data.",
     "actual_count": 262,
     "file": "data/nta.json",
-    "size_kb": 449.7,
-    "default": false,
-    "desc": "Statistical \"neighborhoods\" the City Planning Dept. built from census tracts to report population data."
+    "size_kb": 449.7
   },
   {
     "key": "cdta",
@@ -291,11 +324,11 @@
     "label_kind": "raw",
     "color": "#0b6b6b",
     "authority": "NYC Dept. of City Planning",
+    "default": false,
+    "desc": "Census-tract groupings that approximate the 59 community districts for reporting census data.",
     "actual_count": 71,
     "file": "data/cdta.json",
-    "size_kb": 454.5,
-    "default": false,
-    "desc": "Census-tract groupings that approximate the 59 community districts for reporting census data."
+    "size_kb": 454.5
   },
   {
     "key": "census_tract",
@@ -307,11 +340,11 @@
     "label_kind": "census_tract",
     "color": "#6b7280",
     "authority": "US Census Bureau / DCP",
+    "default": false,
+    "desc": "Small, stable areas the U.S. Census Bureau uses to report demographic data.",
     "actual_count": 2325,
     "file": "data/census_tract.json",
-    "size_kb": 751.4,
-    "default": false,
-    "desc": "Small, stable areas the U.S. Census Bureau uses to report demographic data."
+    "size_kb": 751.4
   },
   {
     "key": "zcta",
@@ -324,11 +357,11 @@
     "label_prefix": "ZIP ",
     "color": "#8a6d0f",
     "authority": "US Census Bureau",
+    "default": false,
+    "desc": "The Census Bureau's mapped approximations of USPS ZIP codes.",
     "actual_count": 221,
     "file": "data/zcta.json",
-    "size_kb": 172.7,
-    "default": false,
-    "desc": "The Census Bureau's mapped approximations of USPS ZIP codes."
+    "size_kb": 172.7
   },
   {
     "key": "historic",
@@ -340,10 +373,10 @@
     "label_kind": "raw",
     "color": "#a15c00",
     "authority": "NYC Landmarks Preservation Commission",
+    "default": false,
+    "desc": "Areas designated by the Landmarks Preservation Commission, where exterior building changes need approval.",
     "actual_count": 141,
     "file": "data/historic.json",
-    "size_kb": 109.9,
-    "default": false,
-    "desc": "Areas designated by the Landmarks Preservation Commission, where exterior building changes need approval."
+    "size_kb": 109.9
   }
 ]

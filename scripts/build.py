@@ -94,6 +94,10 @@ def process(layer, raw_path):
         if layer["key"] == "historic":
             if str(props.get("current_", "")).strip().lower() not in ("yes", "y", "true", "1"):
                 continue
+        # hurricane evac: keep only the six official zones (drop "X"=none and stray codes)
+        if layer["key"] == "hurricane_evac":
+            if str(props.get("hurricane_", "")).strip() not in ("1", "2", "3", "4", "5", "6"):
+                continue
         nm = make_label(layer, props)
         out.append({"type": "Feature", "properties": {"nm": nm}, "geometry": geom})
     if not out:
@@ -106,7 +110,8 @@ def process(layer, raw_path):
 
 def simplify(layer, labeled_path, n):
     out = os.path.join(OUT, layer["key"] + ".json")
-    pct = simplify_pct(n)
+    # a few layers are few-but-very-detailed coastline polygons; thin them harder
+    pct = "7%" if layer["key"] in ("hurricane_evac",) else simplify_pct(n)
     cmd = ["npx", "--yes", "mapshaper", labeled_path,
            "-simplify", pct, "keep-shapes",
            "-clean",

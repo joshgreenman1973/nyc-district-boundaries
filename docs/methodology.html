@@ -41,7 +41,8 @@
   <p>New York City is carved up by dozens of agencies into overlapping districts that rarely line up with one another. A single address can sit inside a community board, a City Council district, a police precinct, a fire battalion, a school district, a sanitation district, a health area, three different legislative districts and more — all at once. This tool lets you switch any combination of those boundaries on and off and see where they agree and where they cut across each other.</p>
 
   <h2>Where the boundaries come from</h2>
-  <p>All 21 layers are official GeoJSON files from <a href="https://opendata.cityofnewyork.us/" target="_blank" rel="noopener">NYC Open Data</a>, the great majority published by the Department of City Planning (the others by the agencies noted below). Land layers are the versions clipped to the shoreline where the city provides them. Each dataset ID below links to its source page.</p>
+  <p>All 23 layers are official GeoJSON files from <a href="https://opendata.cityofnewyork.us/" target="_blank" rel="noopener">NYC Open Data</a>, the great majority published by the Department of City Planning (the others by the agencies noted below). Land layers are the versions clipped to the shoreline where the city provides them. Each dataset ID below links to its source page.</p>
+  <p>These are the current, in-effect boundaries: nearly every DCP layer here is release <b>"26b"</b> (published May 2026), and the redistricted political layers reflect the maps in force for the 2026 elections — the City Council lines adopted in 2023 and the Congressional, State Senate and Assembly lines used since 2024. (New York's congressional map faced a fresh court challenge in early 2026; after a U.S. Supreme Court stay in March 2026 the case was dropped, and the February 2024 map still stands.)</p>
   <div class="tablewrap">
   <table>
     <thead><tr><th>Layer</th><th>Areas</th><th>Publishing authority</th><th>Dataset ID</th></tr></thead>
@@ -58,6 +59,8 @@
 <tr><td>Health center districts</td><td class="m">30</td><td>NYC Dept. of Health / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/6ez8-za84" target="_blank" rel="noopener">6ez8-za84</a></td></tr>
 <tr><td>Health areas</td><td class="m">354</td><td>NYC Dept. of Health / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/jntv-ngw5" target="_blank" rel="noopener">jntv-ngw5</a></td></tr>
 <tr><td>Business improvement districts</td><td class="m">76</td><td>NYC Dept. of Small Business Services</td><td class="m"><a href="https://data.cityofnewyork.us/d/7jdm-inj8" target="_blank" rel="noopener">7jdm-inj8</a></td></tr>
+<tr><td>Commercial waste zones</td><td class="m">20</td><td>NYC Dept. of Sanitation</td><td class="m"><a href="https://data.cityofnewyork.us/d/8ev8-jjxq" target="_blank" rel="noopener">8ev8-jjxq</a></td></tr>
+<tr><td>Hurricane evacuation zones</td><td class="m">6</td><td>NYC Emergency Management / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/epne-qv9x" target="_blank" rel="noopener">epne-qv9x</a></td></tr>
 <tr><td>State Assembly districts</td><td class="m">65</td><td>NYS / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/5yfv-9hkp" target="_blank" rel="noopener">5yfv-9hkp</a></td></tr>
 <tr><td>State Senate districts</td><td class="m">28</td><td>NYS / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/afns-vxeu" target="_blank" rel="noopener">afns-vxeu</a></td></tr>
 <tr><td>Congressional districts</td><td class="m">13</td><td>US Census / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/j3u5-usz2" target="_blank" rel="noopener">j3u5-usz2</a></td></tr>
@@ -82,10 +85,13 @@
   <div class="note">
     This is a reference and comparison tool, not a system of record. For an authoritative answer to "which district is this address in," use the source agency or the city's <a href="https://gis.nyc.gov/taxmap/" target="_blank" rel="noopener">official lookups</a> — not a simplified map.</div>
 
+  <h2>What's deliberately left out</h2>
+  <p>This map covers the jurisdictions that <em>partition</em> the whole city. A few significant boundary systems are intentionally excluded because they're a different kind of thing: <b>zoning districts</b> (a land-use classification of every individual lot — its own dense map), <b>school attendance zones</b> (which change yearly and don't tile the city cleanly), and hazard overlays like <b>FEMA flood zones</b>. Higher- and lower-level cuts of layers already shown — NYPD patrol boroughs, sanitation sections, fire company response areas beyond what's included — are also left out to keep the map legible.</p>
+
   <h2>Rebuilding it</h2>
   <p>The whole pipeline is one script, <code>scripts/build.py</code>: it downloads each dataset's GeoJSON export, normalizes one label per feature, and writes a simplified file plus a <code>manifest.json</code> that drives the map's toggle panel. Layer definitions live in <code>scripts/layers.json</code>. Re-running the script picks up the latest published boundaries.</p>
 
-  <p style="margin-top:40px;font-size:13px;color:var(--ink-soft)">Built July 2026 · 21 layers · 8,503 individual district polygons.</p>
+  <p style="margin-top:40px;font-size:13px;color:var(--ink-soft)">Built July 2026 · 23 layers · 8,529 individual district polygons · source data DCP release 26b.</p>
 </div>
 </body>
 </html>
