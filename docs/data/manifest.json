@@ -166,13 +166,13 @@
     "group": "City services",
     "name": "Business improvement districts",
     "count": 76,
-    "label_field": "f_all_bi_1",
+    "label_field": "f_all_bi_2",
     "label_kind": "raw",
     "color": "#c9a227",
     "authority": "NYC Dept. of Small Business Services",
     "actual_count": 76,
     "file": "data/bid.json",
-    "size_kb": 335.7
+    "size_kb": 336.4
   },
   {
     "key": "assembly",
