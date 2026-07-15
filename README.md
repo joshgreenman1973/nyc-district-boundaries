@@ -24,7 +24,8 @@ An interactive map of **every significant district boundary in New York City** �
 - **Rendering:** Leaflet. Each layer loads lazily on first toggle and draws as a distinct colored outline.
 - **Opens populated:** the map loads with the city's ~10 main district systems on (`"default": true` in `scripts/layers.json`); "Show all" adds the granular statistical layers, "Hide all" clears.
 - **Pinpoint lookup:** search any address (NYC City Planning GeoSearch autocomplete, free, no key) or click the map; a card lists every district that spot falls into, with a copy-as-text button.
-- **Shareable links:** active layers and the dropped pin live in the URL hash (`#l=council,police&p=40.748,-73.985`), so any view can be shared as a link.
+- **Compare two addresses:** "Compare two addresses" adds a second search (A/B); a side-by-side card shows each district for both points, tinting the rows that differ and tallying how many differ vs. match.
+- **Shareable links:** active layers and the dropped pin(s) live in the URL hash (`#l=council,police&p=40.748,-73.985&p2=40.71,-74.01`), so any view — including a two-address comparison — can be shared as a link.
 - Geometry is simplified for speed and labels are generated from source codes — treat exact edges as approximate.
 
 ## Rebuild

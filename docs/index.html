@@ -153,6 +153,45 @@
   .rrow .rv.none{color:#b6ad98}
   .rloading{padding:16px 15px;font-family:"Space Mono",monospace;font-size:11px;color:var(--ink-soft)}
 
+  /* ---------- compare two addresses ---------- */
+  .cmpbtn{margin-top:11px;font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:.04em;
+    text-transform:uppercase;background:none;border:none;color:var(--accent-navy);cursor:pointer;
+    padding:0;border-bottom:1.4px solid var(--accent-navy)}
+  .cmpbtn:hover{color:var(--accent);border-color:var(--accent)}
+  .slotlab{display:none;font-family:"Space Mono",monospace;font-size:9.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-soft);margin:0 0 4px;align-items:center;gap:6px}
+  .slotlab .dot{width:15px;height:15px;border-radius:50%;color:#fff;font-size:9px;font-weight:700;
+    display:inline-flex;align-items:center;justify-content:center}
+  .searchwrap.b{display:none;margin-top:9px}
+  body.compare .slotlab{display:flex}
+  body.compare .searchwrap.b{display:block}
+  #result.wide{width:406px}
+  .cmp-heads{display:flex;flex-direction:column;gap:5px;margin:1px 0 8px}
+  .cmp-h{display:flex;align-items:center;gap:8px;font-size:12.5px;line-height:1.15}
+  .cmp-h .dot{width:18px;height:18px;border-radius:50%;color:#fff;font-family:"Space Mono",monospace;
+    font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:0 0 18px}
+  .cmp-h .adr{flex:1;font-family:"Fraunces",serif;font-weight:600;overflow-wrap:anywhere}
+  .cmp-h .x{cursor:pointer;color:var(--ink-soft);font-size:15px;border:none;background:none;padding:0 2px;line-height:1}
+  .cmp-h .x:hover{color:var(--accent)}
+  .cmp-sum{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--ink-soft);margin:0}
+  .cmp-sum b{color:var(--accent)}
+  .crow{display:grid;grid-template-columns:1fr 96px 96px;gap:8px;align-items:center;padding:5px 15px;cursor:pointer}
+  .crow:hover{background:#f0ebdd}
+  .crow .cn{font-size:11.5px;color:var(--ink-soft);line-height:1.15;display:flex;align-items:center;gap:7px;min-width:0}
+  .crow .cn .rs{width:14px;height:0;border-top-width:3px;border-top-style:solid;flex:0 0 14px;border-radius:2px}
+  .crow .cn span.t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .crow .cv{font-family:"Space Mono",monospace;font-size:10.5px;text-align:right;overflow-wrap:anywhere;line-height:1.2}
+  .crow .cv.a{color:var(--accent)}
+  .crow .cv.b{color:var(--accent-navy)}
+  .crow .cv.none{color:#c3bba6}
+  .crow.same .cv{color:#b1a891}
+  .crow.diff{background:#f8f1e6}
+  .cmp-legend{display:grid;grid-template-columns:1fr 96px 96px;gap:8px;padding:6px 15px 2px;
+    font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+  .cmp-legend .h{text-align:right}
+  .cmp-legend .h .dot{display:inline-block;width:13px;height:13px;border-radius:50%;color:#fff;text-align:center;line-height:13px}
+
   /* mobile */
   #handle{display:none}
   @media(max-width:760px){
@@ -174,11 +213,18 @@
       <p class="kicker">New York City · overlapping jurisdictions</p>
       <h1>The overlapping city</h1>
       <p class="sub">One patch of sidewalk sits inside a dozen different districts at once. It opens with the city's main districts layered on — toggle any set below, or find one exact spot.</p>
-      <div class="searchwrap">
+      <div class="searchwrap a">
+        <div class="slotlab"><span class="dot" style="background:#7a1f2b">A</span> Address A</div>
         <input id="search" type="text" autocomplete="off" spellcheck="false" placeholder="Search an address, or click the map…" />
         <div class="ac" id="ac"></div>
       </div>
+      <div class="searchwrap b">
+        <div class="slotlab"><span class="dot" style="background:#1d2b45">B</span> Address B</div>
+        <input id="searchB" type="text" autocomplete="off" spellcheck="false" placeholder="Second address to compare…" />
+        <div class="ac" id="acB"></div>
+      </div>
       <p class="hint">Every district that spot falls in appears in a results card.</p>
+      <button class="cmpbtn" id="cmpbtn">＋ Compare two addresses</button>
       <div class="controls">
         <button class="btn" id="showall">Select all</button>
         <button class="btn" id="hideall">Clear all</button>
@@ -195,14 +241,8 @@
   <div id="count">Active layers: <b id="nlayers">0</b></div>
   <div id="legend"></div>
   <div id="result">
-    <div class="rhead">
-      <button class="rclose" id="rclose" title="Clear pin">×</button>
-      <p class="rk">This spot sits inside</p>
-      <p class="ra" id="raddr">—</p>
-      <p class="rc" id="rcoord"></p>
-      <button class="rcopy" id="rcopy">Copy list</button>
-    </div>
-    <div class="rlist" id="rlist"></div>
+    <button class="rclose" id="rclose" title="Clear">×</button>
+    <div id="rbody"></div>
   </div>
   <div id="rowtip"></div>
 </div>
@@ -362,9 +402,30 @@ document.getElementById('cbtn').onclick=()=>cModal.classList.add('show');
 document.getElementById('cclose').onclick=()=>cModal.classList.remove('show');
 cModal.addEventListener('click',e=>{if(e.target===cModal)cModal.classList.remove('show');});
 
-/* ============ point-in-polygon lookup ============ */
+/* ============ point-in-polygon lookup + compare ============ */
 map.createPane('hl'); map.getPane('hl').style.zIndex = 640;
-let pin=null, hlLayer=null, curPt=null, containing={}, ptSeq=0;
+const SLOT = {
+  A:{letter:'A', color:'#7a1f2b', pt:null, pin:null, containing:{}, seq:0},
+  B:{letter:'B', color:'#1d2b45', pt:null, pin:null, containing:{}, seq:0},
+};
+let compareMode=false, hlLayers=[];
+function pinIcon(color,letter){
+  return L.divIcon({className:'',iconSize:[28,36],iconAnchor:[14,34],html:
+    '<svg class="pin-ico" width="28" height="36" viewBox="0 0 28 36" xmlns="http://www.w3.org/2000/svg">'+
+    '<path d="M14 0C6.3 0 .5 5.8.5 13.1.5 22.6 14 36 14 36s13.5-13.4 13.5-22.9C27.5 5.8 21.7 0 14 0z" fill="'+color+'"/>'+
+    '<text x="14" y="17.5" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-size="13" font-weight="700" fill="#fff">'+letter+'</text></svg>'});
+}
+function clearHighlights(){ hlLayers.forEach(l=>map.removeLayer(l)); hlLayers=[]; }
+function addHighlight(feature,color){
+  hlLayers.push(L.geoJSON(feature,{pane:'hl',interactive:false,
+    style:{color:color,weight:3.5,opacity:1,fill:true,fillColor:color,fillOpacity:.2}}).addTo(map));
+}
+function computeContaining(lng,lat){
+  const out={};
+  for(const l of LAYERS){ const gj=cache[l.key]; if(!gj) continue;
+    for(const f of gj.features){ if(geomHas(lng,lat,f.geometry)){ out[l.key]=f; break; } } }
+  return out;
+}
 
 function ringHas(x,y,ring){
   let inside=false;
@@ -389,172 +450,220 @@ function ensureLoaded(layer){
 }
 function panelRow(key){ return document.querySelector('.row[data-key="'+key+'"]'); }
 
-async function setPoint(lng,lat,label){
-  curPt={lng,lat,label}; const seq=++ptSeq; updateHash();
-  if(pin){ pin.setLatLng([lat,lng]); } else {
-    const ico=L.divIcon({className:'',iconSize:[26,34],iconAnchor:[13,32],html:
-      '<svg class="pin-ico" width="26" height="34" viewBox="0 0 26 34" xmlns="http://www.w3.org/2000/svg">'+
-      '<path d="M13 0C6 0 .5 5.4.5 12.2.5 21 13 34 13 34s12.5-13 12.5-21.8C25.5 5.4 20 0 13 0z" fill="#7a1f2b"/>'+
-      '<circle cx="13" cy="12" r="4.6" fill="#f5f1e8"/></svg>'});
-    pin=L.marker([lat,lng],{icon:ico,keyboard:false,pane:'markerPane'}).addTo(map);
-  }
-  map.invalidateSize();
-  if(map.getZoom()<12) map.setView([lat,lng],13,{animate:true}); else map.panTo([lat,lng],{animate:true});
-  // result card
-  document.getElementById('raddr').textContent = label || 'Dropped pin';
-  document.getElementById('rcoord').textContent = lat.toFixed(5)+', '+lng.toFixed(5);
-  document.getElementById('result').classList.add('show');
-  const rlist=document.getElementById('rlist');
-  rlist.innerHTML='<div class="rloading">Locating districts…</div>';
-  // load every layer, then test containment
+async function setPoint(slotKey,lng,lat,label){
+  const s=SLOT[slotKey]; s.pt={lng,lat,label}; const seq=++s.seq;
+  if(s.pin) s.pin.setLatLng([lat,lng]);
+  else s.pin=L.marker([lat,lng],{icon:pinIcon(s.color,s.letter),keyboard:false,pane:'markerPane'}).addTo(map);
+  updateHash(); updateView(); showResultLoading();
   await Promise.all(LAYERS.map(ensureLoaded));
-  if(seq!==ptSeq) return; // superseded by a newer point
-  containing={};
-  const results = LAYERS.map(l=>{
-    const gj=cache[l.key]; let hit=null;
-    for(const f of gj.features){ if(geomHas(lng,lat,f.geometry)){ hit=f; break; } }
-    if(hit) containing[l.key]=hit;
-    return {layer:l, nm: hit ? (hit.properties.nm||'—') : null};
+  if(seq!==s.seq || !s.pt) return;            // superseded or cleared while loading
+  s.containing=computeContaining(lng,lat);
+  renderCard();
+}
+
+function updateView(){
+  const a=SLOT.A.pt, b=SLOT.B.pt; map.invalidateSize();
+  if(a&&b){ map.fitBounds(L.latLngBounds([[a.lat,a.lng],[b.lat,b.lng]]).pad(0.35),{maxZoom:14}); }
+  else { const p=a||b; if(p){ if(map.getZoom()<12) map.setView([p.lat,p.lng],13,{animate:true}); else map.panTo([p.lat,p.lng],{animate:true}); } }
+}
+function showResultLoading(){
+  document.getElementById('result').classList.add('show');
+  document.getElementById('rbody').innerHTML='<div class="rloading">Locating districts…</div>';
+}
+function esc(s){ return s==null?'':String(s); }
+
+function renderCard(){
+  const a=SLOT.A.pt, b=SLOT.B.pt, res=document.getElementById('result');
+  if(!a&&!b){ res.classList.remove('show','wide'); clearHighlights(); return; }
+  res.classList.add('show');
+  if(a&&b){ res.classList.add('wide'); renderCompare(); }
+  else { res.classList.remove('wide'); renderSingle(a?'A':'B'); }
+}
+
+function renderSingle(slotKey){
+  const s=SLOT[slotKey];
+  document.getElementById('rbody').innerHTML=
+    `<div class="rhead"><p class="rk">This spot sits inside</p>`+
+    `<p class="ra">${esc(s.pt.label)||'Dropped pin'}</p>`+
+    `<p class="rc">${s.pt.lat.toFixed(5)}, ${s.pt.lng.toFixed(5)}</p>`+
+    `<button class="rcopy" id="rcopy">Copy list</button></div><div class="rlist" id="rlist2"></div>`;
+  const rlist=document.getElementById('rlist2'); let lastGroup=null;
+  LAYERS.forEach(l=>{
+    const hit=s.containing[l.key]; const nm=hit?(hit.properties.nm||'—'):null;
+    if(l.group!==lastGroup){ lastGroup=l.group;
+      const g=document.createElement('div'); g.className='rgroup'; g.textContent=l.group; rlist.appendChild(g); }
+    const row=document.createElement('div'); row.className='rrow';
+    row.innerHTML=`<span class="rs" style="border-top-color:${l.color}"></span>`+
+      `<span class="rn">${l.name}</span><span class="rv ${nm?'':'none'}">${nm||'—'}</span>`;
+    if(nm) row.onclick=()=>selectResultSingle(l.key,slotKey); else row.style.cursor='default';
+    rlist.appendChild(row);
   });
-  if(!curPt) return; // pin cleared while loading
-  renderResults(results);
+  document.getElementById('rcopy').onclick=()=>copySingle(slotKey);
   refreshHighlights();
 }
 
-function renderResults(results){
-  const rlist=document.getElementById('rlist'); rlist.innerHTML='';
-  let lastGroup=null;
-  results.forEach(r=>{
-    if(r.layer.group!==lastGroup){ lastGroup=r.layer.group;
-      const g=document.createElement('div'); g.className='rgroup'; g.textContent=lastGroup; rlist.appendChild(g); }
-    const row=document.createElement('div'); row.className='rrow';
-    row.innerHTML=`<span class="rs" style="border-top-color:${r.layer.color}"></span>`+
-      `<span class="rn">${r.layer.name}</span>`+
-      `<span class="rv ${r.nm?'':'none'}">${r.nm||'—'}</span>`;
-    if(r.nm){ row.onclick=()=>selectResult(r.layer.key); } else { row.style.cursor='default'; }
+function renderCompare(){
+  const A=SLOT.A, B=SLOT.B, rb=document.getElementById('rbody');
+  let diff=0, shared=0;
+  LAYERS.forEach(l=>{ const av=A.containing[l.key]&&A.containing[l.key].properties.nm,
+    bv=B.containing[l.key]&&B.containing[l.key].properties.nm;
+    if(av!=null||bv!=null){ (av===bv)?shared++:diff++; } });
+  rb.innerHTML=`<div class="rhead"><p class="rk">Comparing two addresses</p>`+
+    `<div class="cmp-heads">`+
+      `<div class="cmp-h"><span class="dot" style="background:${A.color}">A</span><span class="adr">${esc(A.pt.label)||'Point A'}</span><button class="x" data-slot="A" title="Clear A">×</button></div>`+
+      `<div class="cmp-h"><span class="dot" style="background:${B.color}">B</span><span class="adr">${esc(B.pt.label)||'Point B'}</span><button class="x" data-slot="B" title="Clear B">×</button></div>`+
+    `</div><p class="cmp-sum"><b>${diff}</b> differ · ${shared} shared</p>`+
+    `<button class="rcopy" id="rcopy">Copy comparison</button></div>`+
+    `<div class="cmp-legend"><span></span><span class="h"><span class="dot" style="background:${A.color}">A</span></span><span class="h"><span class="dot" style="background:${B.color}">B</span></span></div>`+
+    `<div class="rlist" id="rlist2"></div>`;
+  const rlist=document.getElementById('rlist2'); let lastGroup=null;
+  LAYERS.forEach(l=>{
+    const ah=A.containing[l.key], bh=B.containing[l.key];
+    const av=ah?(ah.properties.nm||'—'):null, bv=bh?(bh.properties.nm||'—'):null;
+    const applies=(av!=null||bv!=null), same=(av===bv);
+    if(l.group!==lastGroup){ lastGroup=l.group;
+      const g=document.createElement('div'); g.className='rgroup'; g.textContent=l.group; rlist.appendChild(g); }
+    const row=document.createElement('div'); row.className='crow '+(applies&&!same?'diff':'same');
+    row.innerHTML=`<span class="cn"><span class="rs" style="border-top-color:${l.color}"></span><span class="t">${l.name}</span></span>`+
+      `<span class="cv a ${av?'':'none'}">${av||'—'}</span>`+
+      `<span class="cv b ${bv?'':'none'}">${bv||'—'}</span>`;
+    row.onclick=()=>selectResultCompare(l.key);
     rlist.appendChild(row);
   });
+  rb.querySelectorAll('.cmp-h .x').forEach(btn=>btn.onclick=()=>clearSlot(btn.dataset.slot));
+  document.getElementById('rcopy').onclick=copyCompare;
+  clearHighlights();  // compare view highlights on row-click, not automatically
 }
 
-// clicking a result row: switch that layer on and outline the containing district
-async function selectResult(key){
+// auto-highlight a neighborhood-scale district for the single-point view
+function refreshHighlights(){
+  clearHighlights();
+  const a=SLOT.A.pt, b=SLOT.B.pt;
+  if(a&&b) return;                 // compare mode: no auto highlight
+  const s=a?SLOT.A:(b?SLOT.B:null); if(!s) return;
+  const key=Object.keys(s.containing).find(k=>active[k]&&k!=='borough');
+  if(key&&s.containing[key]) addHighlight(s.containing[key], LAYERS.find(l=>l.key===key).color);
+}
+
+async function selectResultSingle(key,slotKey){
   const layer=LAYERS.find(l=>l.key===key);
-  const row=panelRow(key);
-  if(!active[key]){ await toggle(layer,row); }
-  refreshHighlights(key);
+  if(!active[key]) await toggle(layer,panelRow(key));
+  clearHighlights();
+  const s=SLOT[slotKey]; if(s.containing[key]) addHighlight(s.containing[key],layer.color);
 }
-
-function refreshHighlights(focusKey){
-  if(hlLayer){ map.removeLayer(hlLayer); hlLayer=null; }
-  // auto-pick a neighborhood-scale district, not the whole borough
-  const key = focusKey || Object.keys(containing).find(k=>active[k] && k!=='borough');
-  if(!key || !containing[key]) return;
+async function selectResultCompare(key){
   const layer=LAYERS.find(l=>l.key===key);
-  hlLayer=L.geoJSON(containing[key],{pane:'hl',interactive:false,
-    style:{color:layer.color,weight:3.5,opacity:1,fill:true,fillColor:layer.color,fillOpacity:.22}}).addTo(map);
+  if(!active[key]) await toggle(layer,panelRow(key));
+  clearHighlights();
+  if(SLOT.A.containing[key]) addHighlight(SLOT.A.containing[key],SLOT.A.color);
+  if(SLOT.B.containing[key]) addHighlight(SLOT.B.containing[key],SLOT.B.color);
 }
 
-function clearPin(){
-  curPt=null; containing={};
-  if(pin){ map.removeLayer(pin); pin=null; }
-  if(hlLayer){ map.removeLayer(hlLayer); hlLayer=null; }
-  document.getElementById('result').classList.remove('show');
-  updateHash();
+function clearSlot(k){
+  const s=SLOT[k]; s.pt=null; s.containing={}; s.seq++;
+  if(s.pin){ map.removeLayer(s.pin); s.pin=null; }
+  document.getElementById(k==='A'?'search':'searchB').value='';
+  renderCard(); updateHash();
 }
-document.getElementById('rclose').onclick=clearPin;
-map.on('click',e=>setPoint(e.latlng.lng,e.latlng.lat));
+function clearAll(){
+  ['A','B'].forEach(k=>{ const s=SLOT[k]; s.pt=null; s.containing={}; s.seq++; if(s.pin){map.removeLayer(s.pin);s.pin=null;} });
+  document.getElementById('search').value=''; document.getElementById('searchB').value='';
+  clearHighlights(); document.getElementById('result').classList.remove('show','wide'); updateHash();
+}
+document.getElementById('rclose').onclick=clearAll;
+map.on('click',e=>{
+  const {lat,lng}=e.latlng;
+  if(compareMode && SLOT.A.pt && !SLOT.B.pt) setPoint('B',lng,lat);
+  else setPoint('A',lng,lat);
+});
 
-/* ---- copy the district list as plain text ---- */
-document.getElementById('rcopy').onclick=()=>{
-  if(!curPt) return;
-  const lines=[(curPt.label||'Dropped pin')+' ('+curPt.lat.toFixed(5)+', '+curPt.lng.toFixed(5)+')'];
-  LAYERS.forEach(l=>{
-    const hit=containing[l.key];
-    if(hit) lines.push(l.name+': '+(hit.properties.nm||'—'));
-  });
-  const text=lines.join('\n');
-  const done=()=>{
-    const b=document.getElementById('rcopy');
-    b.textContent='Copied'; b.classList.add('did');
-    setTimeout(()=>{b.textContent='Copy list'; b.classList.remove('did');},1400);
-  };
-  const fallback=()=>{
-    const ta=document.createElement('textarea'); ta.value=text;
-    ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta);
-    ta.select(); try{ document.execCommand('copy'); done(); }catch(e){} ta.remove();
-  };
-  if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text).then(done,fallback);
-  } else fallback();
-};
+/* ---- compare mode toggle ---- */
+const cmpbtn=document.getElementById('cmpbtn');
+function setCompare(on){
+  compareMode=on; document.body.classList.toggle('compare',on);
+  cmpbtn.textContent = on ? '×  Comparing two addresses' : '＋ Compare two addresses';
+  if(!on){ clearSlot('B'); } else { setTimeout(()=>document.getElementById('searchB').focus(),0); }
+}
+cmpbtn.onclick=()=>setCompare(!compareMode);
 
-/* ---- shareable URL state (#l=layers&p=lat,lng&n=label) ---- */
+/* ---- copy as plain text ---- */
+function clip(text,btn,label){
+  const done=()=>{ btn.textContent='Copied'; btn.classList.add('did'); setTimeout(()=>{btn.textContent=label; btn.classList.remove('did');},1400); };
+  const fb=()=>{ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');done();}catch(e){} ta.remove(); };
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done,fb); else fb();
+}
+function copySingle(slotKey){
+  const s=SLOT[slotKey]; if(!s.pt) return;
+  const lines=[(esc(s.pt.label)||'Dropped pin')+' ('+s.pt.lat.toFixed(5)+', '+s.pt.lng.toFixed(5)+')'];
+  LAYERS.forEach(l=>{ const h=s.containing[l.key]; if(h) lines.push(l.name+': '+(h.properties.nm||'—')); });
+  clip(lines.join('\n'), document.getElementById('rcopy'), 'Copy list');
+}
+function copyCompare(){
+  const A=SLOT.A, B=SLOT.B; if(!A.pt||!B.pt) return;
+  const lines=['District comparison','A: '+(esc(A.pt.label)||'Point A'),'B: '+(esc(B.pt.label)||'Point B'),''];
+  LAYERS.forEach(l=>{ const av=A.containing[l.key]&&(A.containing[l.key].properties.nm||'—'), bv=B.containing[l.key]&&(B.containing[l.key].properties.nm||'—');
+    if(av!=null||bv!=null) lines.push(`${l.name}: A ${av||'—'} | B ${bv||'—'}${av===bv?'':'  (differ)'}`); });
+  clip(lines.join('\n'), document.getElementById('rcopy'), 'Copy comparison');
+}
+
+/* ---- shareable URL state (#l=layers&p=A&n=A-label&p2=B&n2=B-label) ---- */
 function updateHash(){
-  const parts=[];
-  const keys=LAYERS.filter(l=>active[l.key]).map(l=>l.key);
+  const parts=[]; const keys=LAYERS.filter(l=>active[l.key]).map(l=>l.key);
   if(keys.length) parts.push('l='+keys.join(','));
-  if(curPt){
-    parts.push('p='+curPt.lat.toFixed(5)+','+curPt.lng.toFixed(5));
-    if(curPt.label) parts.push('n='+encodeURIComponent(curPt.label));
-  }
+  const a=SLOT.A.pt, b=SLOT.B.pt;
+  if(a){ parts.push('p='+a.lat.toFixed(5)+','+a.lng.toFixed(5)); if(a.label) parts.push('n='+encodeURIComponent(a.label)); }
+  if(b){ parts.push('p2='+b.lat.toFixed(5)+','+b.lng.toFixed(5)); if(b.label) parts.push('n2='+encodeURIComponent(b.label)); }
   history.replaceState(null,'',parts.length?('#'+parts.join('&')):location.pathname+location.search);
 }
 function restoreFromHash(){
-  const h=location.hash.replace(/^#/,'');
-  if(!h) return;
+  const h=location.hash.replace(/^#/,''); if(!h) return;
   const q=new URLSearchParams(h);
-  (q.get('l')||'').split(',').filter(Boolean).forEach(k=>{
-    const l=LAYERS.find(x=>x.key===k), r=panelRow(k);
-    if(l&&r&&!active[k]) toggle(l,r);
-  });
+  (q.get('l')||'').split(',').filter(Boolean).forEach(k=>{ const l=LAYERS.find(x=>x.key===k), r=panelRow(k); if(l&&r&&!active[k]) toggle(l,r); });
   const p=(q.get('p')||'').split(',').map(Number);
-  if(p.length===2&&isFinite(p[0])&&isFinite(p[1])) setPoint(p[1],p[0],q.get('n')||null);
+  if(p.length===2&&isFinite(p[0])&&isFinite(p[1])){ if(q.get('n')) document.getElementById('search').value=q.get('n'); setPoint('A',p[1],p[0],q.get('n')||null); }
+  const p2=(q.get('p2')||'').split(',').map(Number);
+  if(p2.length===2&&isFinite(p2[0])&&isFinite(p2[1])){ setCompare(true); if(q.get('n2')) document.getElementById('searchB').value=q.get('n2'); setPoint('B',p2[1],p2[0],q.get('n2')||null); }
 }
 // a share link pasted into an already-open tab fires hashchange, not a load
 window.addEventListener('hashchange',()=>{ if(LAYERS.length) restoreFromHash(); });
 
 /* ============ address autocomplete (NYC GeoSearch) ============ */
-const searchEl=document.getElementById('search'), acEl=document.getElementById('ac');
-let acItems=[], acSel=-1, acTimer=null, acSeq=0;
-function hideAC(){ acEl.classList.remove('show'); acEl.innerHTML=''; acItems=[]; acSel=-1; }
-function renderAC(){
-  acEl.innerHTML='';
-  acItems.forEach((f,i)=>{
-    const d=document.createElement('div'); d.className='ac-item'+(i===acSel?' sel':'');
-    const lab=f.properties.label.replace(/, USA$/,'');
-    d.innerHTML=`${lab} <span class="bo">${f.properties.borough||''}</span>`;
-    d.onmousedown=(ev)=>{ev.preventDefault(); pick(f);};
-    acEl.appendChild(d);
+function makeAutocomplete(input, acEl, onPick){
+  let items=[], sel=-1, timer=null, seq=0;
+  const hide=()=>{ acEl.classList.remove('show'); acEl.innerHTML=''; items=[]; sel=-1; };
+  const render=()=>{
+    acEl.innerHTML='';
+    items.forEach((f,i)=>{
+      const d=document.createElement('div'); d.className='ac-item'+(i===sel?' sel':'');
+      d.innerHTML=`${f.properties.label.replace(/, USA$/,'')} <span class="bo">${f.properties.borough||''}</span>`;
+      d.onmousedown=(ev)=>{ ev.preventDefault(); choose(f); };
+      acEl.appendChild(d);
+    });
+    acEl.classList.toggle('show',items.length>0);
+  };
+  const choose=(f)=>{ input.value=f.properties.label.replace(/, USA$/,''); hide(); const c=f.geometry.coordinates; onPick(c[0],c[1],input.value); };
+  input.addEventListener('input',()=>{
+    const q=input.value.trim(); clearTimeout(timer);
+    if(q.length<3){ hide(); return; }
+    timer=setTimeout(async()=>{
+      const s=++seq;
+      try{ const r=await fetch('https://geosearch.planninglabs.nyc/v2/autocomplete?text='+encodeURIComponent(q));
+        const d=await r.json(); if(s!==seq) return;
+        items=(d.features||[]).slice(0,6); sel=-1; render();
+      }catch(e){ hide(); }
+    },170);
   });
-  acEl.classList.toggle('show',acItems.length>0);
+  input.addEventListener('keydown',e=>{
+    if(!items.length) return;
+    if(e.key==='ArrowDown'){ e.preventDefault(); sel=(sel+1)%items.length; render(); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); sel=(sel-1+items.length)%items.length; render(); }
+    else if(e.key==='Enter'){ e.preventDefault(); choose(items[sel>=0?sel:0]); }
+    else if(e.key==='Escape'){ hide(); }
+  });
+  input.addEventListener('blur',()=>setTimeout(hide,120));
 }
-function pick(f){
-  searchEl.value=f.properties.label.replace(/, USA$/,'');
-  hideAC();
-  const c=f.geometry.coordinates; setPoint(c[0],c[1],searchEl.value);
-}
-searchEl.addEventListener('input',()=>{
-  const q=searchEl.value.trim();
-  clearTimeout(acTimer);
-  if(q.length<3){ hideAC(); return; }
-  acTimer=setTimeout(async()=>{
-    const seq=++acSeq;
-    try{
-      const r=await fetch('https://geosearch.planninglabs.nyc/v2/autocomplete?text='+encodeURIComponent(q));
-      const d=await r.json();
-      if(seq!==acSeq) return; // stale
-      acItems=(d.features||[]).slice(0,6); acSel=-1; renderAC();
-    }catch(e){ hideAC(); }
-  },170);
-});
-searchEl.addEventListener('keydown',e=>{
-  if(!acItems.length) return;
-  if(e.key==='ArrowDown'){ e.preventDefault(); acSel=(acSel+1)%acItems.length; renderAC(); }
-  else if(e.key==='ArrowUp'){ e.preventDefault(); acSel=(acSel-1+acItems.length)%acItems.length; renderAC(); }
-  else if(e.key==='Enter'){ e.preventDefault(); pick(acItems[acSel>=0?acSel:0]); }
-  else if(e.key==='Escape'){ hideAC(); }
-});
-searchEl.addEventListener('blur',()=>setTimeout(hideAC,120));
+makeAutocomplete(document.getElementById('search'), document.getElementById('ac'), (lng,lat,label)=>setPoint('A',lng,lat,label));
+makeAutocomplete(document.getElementById('searchB'), document.getElementById('acB'), (lng,lat,label)=>setPoint('B',lng,lat,label));
 </script>
 </body>
 </html>
