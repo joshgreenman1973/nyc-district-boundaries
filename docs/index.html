@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>The overlapping city — every district boundary in New York</title>
+<meta name="description" content="An interactive map of every significant district boundary in New York City — community boards, council, police precincts, school districts and more — that you can overlay and compare." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<style>
+  :root{
+    --paper:#f5f1e8; --land:#faf7ef; --water:#dbe1e0; --ink:#1b1a17;
+    --ink-soft:#5c574c; --line:#d9d3c4; --panel:#fbf9f3; --accent:#7a1f2b;
+    --accent-navy:#1d2b45;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:"Space Grotesk",system-ui,sans-serif;color:var(--ink);background:var(--paper)}
+  #app{display:flex;height:100vh;width:100vw;overflow:hidden}
+
+  /* ---------- panel ---------- */
+  #panel{width:372px;min-width:372px;height:100%;background:var(--panel);
+    border-right:1.5px solid var(--ink);display:flex;flex-direction:column;z-index:1200}
+  .phead{padding:22px 22px 16px;border-bottom:1.5px solid var(--ink)}
+  .kicker{font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 10px}
+  h1{font-family:"Fraunces",serif;font-weight:600;font-size:27px;line-height:1.05;margin:0 0 10px;letter-spacing:-.01em}
+  .sub{font-size:12.5px;line-height:1.5;color:var(--ink-soft);margin:0}
+  .controls{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .btn{font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:.06em;
+    text-transform:uppercase;background:var(--paper);border:1.3px solid var(--ink);
+    color:var(--ink);padding:7px 11px;cursor:pointer;border-radius:2px;transition:.14s}
+  .btn:hover{background:var(--ink);color:var(--paper)}
+  .btn.caution{border-color:var(--accent);color:var(--accent)}
+  .btn.caution:hover{background:var(--accent);color:#fff}
+
+  #layers{flex:1;overflow-y:auto;padding:6px 0 24px}
+  .group{padding:16px 22px 2px}
+  .glabel{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink-soft);margin:0 0 8px;
+    display:flex;justify-content:space-between;align-items:baseline}
+  .glabel span{color:var(--line)}
+  .row{display:flex;align-items:center;gap:11px;padding:7px 22px;cursor:pointer;
+    user-select:none;transition:background .12s;position:relative}
+  .row:hover{background:#f0ebdd}
+  .row.on{background:#efeadb}
+  .swatch{width:22px;height:0;border-top-width:3px;border-top-style:solid;flex:0 0 22px;border-radius:2px}
+  .row .nm{flex:1;font-size:13.5px;line-height:1.15}
+  .row .ct{font-family:"Space Mono",monospace;font-size:10.5px;color:var(--ink-soft)}
+  .row .box{width:15px;height:15px;border:1.4px solid var(--ink);flex:0 0 15px;border-radius:2px;
+    display:flex;align-items:center;justify-content:center;background:var(--paper)}
+  .row.on .box{background:var(--ink)}
+  .row.on .box::after{content:"";width:7px;height:7px;background:var(--paper)}
+  .row.loading .ct{color:var(--accent)}
+  .row.loading .ct::after{content:" ···"}
+  .foot{padding:14px 22px;border-top:1.5px solid var(--ink);font-size:11px;color:var(--ink-soft);line-height:1.5}
+  .foot a{color:var(--accent-navy);font-weight:600}
+
+  /* ---------- map ---------- */
+  #map{flex:1;height:100%;background:var(--water)}
+  .leaflet-container{background:var(--water);font-family:"Space Grotesk",sans-serif}
+  .leaflet-tooltip.tip{background:var(--ink);color:var(--paper);border:none;
+    font-family:"Space Mono",monospace;font-size:11px;padding:5px 9px;border-radius:2px;box-shadow:0 3px 12px rgba(0,0,0,.28)}
+  .leaflet-tooltip.tip::before{display:none}
+  .tip .tl{color:#c9c2b0;font-size:9px;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:2px}
+
+  /* active-layer legend chip on map */
+  #legend{position:absolute;right:14px;bottom:20px;z-index:1000;display:flex;flex-direction:column;
+    gap:5px;align-items:flex-end;max-width:60vw;pointer-events:none}
+  .chip{background:var(--panel);border:1.3px solid var(--ink);border-radius:2px;
+    padding:4px 9px;font-size:11px;display:flex;align-items:center;gap:8px;
+    box-shadow:0 1px 4px rgba(0,0,0,.1)}
+  .chip i{width:16px;height:0;border-top-width:3px;border-top-style:solid;display:inline-block}
+
+  #count{position:absolute;left:390px;top:14px;z-index:1000;background:var(--panel);
+    border:1.3px solid var(--ink);border-radius:2px;padding:6px 12px;
+    font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.02em}
+  #count b{color:var(--accent)}
+
+  /* caution popover */
+  #caution{position:absolute;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;
+    background:rgba(20,20,18,.42)}
+  #caution.show{display:flex}
+  .card{background:var(--accent-navy);color:#eef1f6;max-width:430px;margin:20px;padding:26px 26px 22px;
+    border-radius:4px;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+  .card h3{font-family:"Fraunces",serif;margin:0 0 12px;font-size:20px}
+  .card p{font-size:13px;line-height:1.6;margin:0 0 12px;color:#cdd4e2}
+  .card .btn{border-color:#eef1f6;color:#eef1f6;background:transparent;margin-top:4px}
+  .card .btn:hover{background:#eef1f6;color:var(--accent-navy)}
+
+  /* mobile */
+  #handle{display:none}
+  @media(max-width:760px){
+    #app{flex-direction:column}
+    #panel{width:100%;min-width:0;height:auto;max-height:52vh;border-right:none;border-bottom:1.5px solid var(--ink)}
+    #map{flex:1}
+    #count{left:14px;top:auto;bottom:20px}
+    #legend{bottom:64px}
+    h1{font-size:22px}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <aside id="panel">
+    <div class="phead">
+      <p class="kicker">New York City · overlapping jurisdictions</p>
+      <h1>The overlapping city</h1>
+      <p class="sub">One patch of sidewalk sits inside a dozen different districts at once. Toggle any set of boundaries below to see how the city is really divided.</p>
+      <div class="controls">
+        <button class="btn" id="clear">Clear all</button>
+        <button class="btn" id="fit">Reset view</button>
+        <button class="btn caution" id="cbtn">AI caution</button>
+      </div>
+    </div>
+    <div id="layers"></div>
+    <div class="foot">
+      Boundaries from <a href="https://opendata.cityofnewyork.us/" target="_blank" rel="noopener">NYC Open Data</a>, published by the Dept. of City Planning and partner agencies. <a href="methodology.html">Methodology & sources →</a>
+    </div>
+  </aside>
+  <div id="map"></div>
+  <div id="count">Active layers: <b id="nlayers">0</b></div>
+  <div id="legend"></div>
+</div>
+
+<div id="caution">
+  <div class="card">
+    <h3>A note on how this was made</h3>
+    <p>This map was built with AI assistance. Every boundary is drawn directly from official NYC Open Data files — but geometries are simplified for speed, and labels are generated programmatically, so treat exact edges and names as approximate.</p>
+    <p>For anything official — which precinct, board or council district an address falls in — confirm against the source agency.</p>
+    <button class="btn" id="cclose">Got it</button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const map = L.map('map',{zoomControl:true,minZoom:10,maxZoom:16,attributionControl:false})
+  .setView([40.702,-73.94],11);
+L.control.attribution({prefix:false}).addAttribution('NYC Open Data / Dept. of City Planning').addTo(map);
+
+const panes = {};
+const cache = {};      // key -> geojson
+const active = {};     // key -> L.geoJSON layer
+let LAYERS = [];
+
+// dedicated panes so stacking order is stable (base under everything)
+map.createPane('base'); map.getPane('base').style.zIndex = 210;
+
+function baseStyle(){ return {color:'#c9c2ae',weight:1,fill:true,fillColor:'#faf7ef',fillOpacity:1,opacity:1}; }
+
+// ---- load base boroughs as the "land" ----
+let HOME=null;
+function fitHome(){ if(HOME){ map.invalidateSize(); map.fitBounds(HOME,{padding:[24,24]}); } }
+fetch('data/borough.json').then(r=>r.json()).then(gj=>{
+  L.geoJSON(gj,{pane:'base',style:baseStyle,interactive:false}).addTo(map);
+  HOME = L.geoJSON(gj).getBounds();
+  // fit only once the container has its final size (async fetch can resolve
+  // before flex layout settles, which otherwise pins zoom to max)
+  requestAnimationFrame(()=>requestAnimationFrame(fitHome));
+  setTimeout(fitHome,150);
+});
+
+function layerStyle(color){ return {color:color,weight:1.6,opacity:.95,fill:true,fillColor:color,fillOpacity:.06}; }
+function hoverStyle(color){ return {weight:3.4,fillOpacity:.16}; }
+
+function tip(layerName,nm){
+  return `<span class="tl">${layerName}</span>${nm||'—'}`;
+}
+
+async function toggle(layer,row){
+  const key = layer.key;
+  if(active[key]){
+    map.removeLayer(active[key]); delete active[key];
+    row.classList.remove('on'); updateHUD(); return;
+  }
+  row.classList.add('on');
+  let gj = cache[key];
+  if(!gj){
+    row.classList.add('loading');
+    try{ gj = await fetch(layer.file).then(r=>r.json()); cache[key]=gj; }
+    catch(e){ row.classList.remove('on','loading'); alert('Could not load '+layer.name); return; }
+    row.classList.remove('loading');
+  }
+  if(!row.classList.contains('on')) return; // user toggled off while loading
+  if(!panes[key]){ map.createPane('p_'+key); panes[key]=true; map.getPane('p_'+key).style.zIndex = 300 + Object.keys(panes).length; }
+  const lyr = L.geoJSON(gj,{
+    pane:'p_'+key,
+    style:layerStyle(layer.color),
+    onEachFeature:(f,l)=>{
+      l.bindTooltip(tip(layer.name,f.properties&&f.properties.nm),{sticky:true,className:'tip',direction:'top'});
+      l.on('mouseover',()=>l.setStyle(hoverStyle(layer.color)));
+      l.on('mouseout',()=>l.setStyle(layerStyle(layer.color)));
+    }
+  }).addTo(map);
+  active[key]=lyr; updateHUD();
+}
+
+function updateHUD(){
+  const keys = Object.keys(active);
+  document.getElementById('nlayers').textContent = keys.length;
+  const leg = document.getElementById('legend'); leg.innerHTML='';
+  LAYERS.filter(l=>active[l.key]).forEach(l=>{
+    const c=document.createElement('div'); c.className='chip';
+    c.innerHTML=`<i style="border-top-color:${l.color}"></i>${l.name}`; leg.appendChild(c);
+  });
+}
+
+// ---- build panel ----
+fetch('data/manifest.json').then(r=>r.json()).then(m=>{
+  LAYERS = m;
+  const root = document.getElementById('layers');
+  const groups = [];
+  m.forEach(l=>{ if(!groups.includes(l.group)) groups.push(l.group); });
+  groups.forEach(g=>{
+    const items = m.filter(l=>l.group===g);
+    const gd=document.createElement('div'); gd.className='group';
+    gd.innerHTML=`<p class="glabel">${g}<span>${items.length}</span></p>`;
+    root.appendChild(gd);
+    items.forEach(l=>{
+      const row=document.createElement('div'); row.className='row'; row.dataset.key=l.key;
+      row.innerHTML=`<span class="box"></span>`+
+        `<span class="swatch" style="border-top-color:${l.color}"></span>`+
+        `<span class="nm">${l.name}</span>`+
+        `<span class="ct">${(l.actual_count||l.count).toLocaleString()}</span>`;
+      row.addEventListener('click',()=>toggle(l,row));
+      root.appendChild(row);
+    });
+  });
+});
+
+// ---- controls ----
+document.getElementById('clear').onclick=()=>{
+  Object.keys(active).forEach(k=>{map.removeLayer(active[k]);delete active[k];});
+  document.querySelectorAll('.row.on').forEach(r=>r.classList.remove('on'));
+  updateHUD();
+};
+document.getElementById('fit').onclick=()=>{ if(HOME) map.fitBounds(HOME,{padding:[24,24]}); };
+const cModal=document.getElementById('caution');
+document.getElementById('cbtn').onclick=()=>cModal.classList.add('show');
+document.getElementById('cclose').onclick=()=>cModal.classList.remove('show');
+cModal.addEventListener('click',e=>{if(e.target===cModal)cModal.classList.remove('show');});
+</script>
+</body>
+</html>

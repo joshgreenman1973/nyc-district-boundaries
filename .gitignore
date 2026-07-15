@@ -1,0 +1,4 @@
+data/raw/
+data/labeled/
+node_modules/
+.DS_Store

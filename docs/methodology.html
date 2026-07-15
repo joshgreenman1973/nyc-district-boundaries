@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Methodology — The overlapping city</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{--paper:#f5f1e8;--ink:#1b1a17;--ink-soft:#5c574c;--line:#d9d3c4;--accent:#7a1f2b;--navy:#1d2b45}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Space Grotesk",system-ui,sans-serif;line-height:1.6}
+  .wrap{max-width:760px;margin:0 auto;padding:54px 24px 90px}
+  .kicker{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+  h1{font-family:"Fraunces",serif;font-weight:600;font-size:40px;line-height:1.02;margin:0 0 8px;letter-spacing:-.015em}
+  h2{font-family:"Fraunces",serif;font-weight:600;font-size:22px;margin:42px 0 10px}
+  a{color:var(--navy)}
+  .lede{font-size:17px;color:var(--ink-soft);margin:0 0 8px}
+  p{font-size:15px}
+  .back{display:inline-block;font-family:"Space Mono",monospace;font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:34px;color:var(--accent);text-decoration:none;border-bottom:1.5px solid var(--accent);padding-bottom:2px}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:"Space Mono",monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);border-bottom:1.5px solid var(--ink)}
+  td.m{font-family:"Space Mono",monospace;font-size:12px;white-space:nowrap}
+  .note{background:#efeadb;border-left:3px solid var(--accent);padding:14px 18px;font-size:14px;margin:22px 0;border-radius:0 3px 3px 0}
+  code{font-family:"Space Mono",monospace;font-size:12.5px;background:#eae4d4;padding:1px 5px;border-radius:3px}
+  ul{padding-left:20px}
+  li{margin:6px 0;font-size:15px}
+  .tablewrap{overflow-x:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← Back to the map</a>
+  <p class="kicker">Methodology &amp; sources</p>
+  <h1>How this map was built</h1>
+  <p class="lede">Every line on this map is a real administrative boundary published by New York City. Here is exactly where each one comes from and what was done to it.</p>
+
+  <h2>What it shows</h2>
+  <p>New York City is carved up by dozens of agencies into overlapping districts that rarely line up with one another. A single address can sit inside a community board, a City Council district, a police precinct, a fire battalion, a school district, a sanitation district, a health area, three different legislative districts and more — all at once. This tool lets you switch any combination of those boundaries on and off and see where they agree and where they cut across each other.</p>
+
+  <h2>Where the boundaries come from</h2>
+  <p>All 21 layers are official GeoJSON files from <a href="https://opendata.cityofnewyork.us/" target="_blank" rel="noopener">NYC Open Data</a>, the great majority published by the Department of City Planning (the others by the agencies noted below). Land layers are the versions clipped to the shoreline where the city provides them. Each dataset ID below links to its source page.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Layer</th><th>Areas</th><th>Publishing authority</th><th>Dataset ID</th></tr></thead>
+    <tbody>
+<tr><td>Borough boundaries</td><td class="m">5</td><td>NYC Dept. of City Planning</td><td class="m"><a href="https://data.cityofnewyork.us/d/gthc-hcne" target="_blank" rel="noopener">gthc-hcne</a></td></tr>
+<tr><td>Community districts / boards</td><td class="m">71</td><td>NYC Dept. of City Planning</td><td class="m"><a href="https://data.cityofnewyork.us/d/5crt-au7u" target="_blank" rel="noopener">5crt-au7u</a></td></tr>
+<tr><td>City Council districts</td><td class="m">51</td><td>NYC City Council / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/872g-cjhh" target="_blank" rel="noopener">872g-cjhh</a></td></tr>
+<tr><td>Community school districts</td><td class="m">33</td><td>NYC Dept. of Education / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/8ugf-3d8u" target="_blank" rel="noopener">8ugf-3d8u</a></td></tr>
+<tr><td>Police precincts</td><td class="m">78</td><td>NYPD / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/y76i-bdw7" target="_blank" rel="noopener">y76i-bdw7</a></td></tr>
+<tr><td>Fire battalions</td><td class="m">49</td><td>FDNY / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/xzng-ft6f" target="_blank" rel="noopener">xzng-ft6f</a></td></tr>
+<tr><td>Fire divisions</td><td class="m">9</td><td>FDNY / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/68m2-uzcb" target="_blank" rel="noopener">68m2-uzcb</a></td></tr>
+<tr><td>Fire companies</td><td class="m">348</td><td>FDNY / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/bst7-5464" target="_blank" rel="noopener">bst7-5464</a></td></tr>
+<tr><td>Sanitation districts</td><td class="m">59</td><td>NYC Dept. of Sanitation</td><td class="m"><a href="https://data.cityofnewyork.us/d/i6mn-amj2" target="_blank" rel="noopener">i6mn-amj2</a></td></tr>
+<tr><td>Health center districts</td><td class="m">30</td><td>NYC Dept. of Health / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/6ez8-za84" target="_blank" rel="noopener">6ez8-za84</a></td></tr>
+<tr><td>Health areas</td><td class="m">354</td><td>NYC Dept. of Health / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/jntv-ngw5" target="_blank" rel="noopener">jntv-ngw5</a></td></tr>
+<tr><td>Business improvement districts</td><td class="m">76</td><td>NYC Dept. of Small Business Services</td><td class="m"><a href="https://data.cityofnewyork.us/d/7jdm-inj8" target="_blank" rel="noopener">7jdm-inj8</a></td></tr>
+<tr><td>State Assembly districts</td><td class="m">65</td><td>NYS / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/5yfv-9hkp" target="_blank" rel="noopener">5yfv-9hkp</a></td></tr>
+<tr><td>State Senate districts</td><td class="m">28</td><td>NYS / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/afns-vxeu" target="_blank" rel="noopener">afns-vxeu</a></td></tr>
+<tr><td>Congressional districts</td><td class="m">13</td><td>US Census / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/j3u5-usz2" target="_blank" rel="noopener">j3u5-usz2</a></td></tr>
+<tr><td>Election districts</td><td class="m">4,214</td><td>NYC Board of Elections / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/wwxk-38u4" target="_blank" rel="noopener">wwxk-38u4</a></td></tr>
+<tr><td>Neighborhood tabulation areas</td><td class="m">262</td><td>NYC Dept. of City Planning</td><td class="m"><a href="https://data.cityofnewyork.us/d/9nt8-h7nd" target="_blank" rel="noopener">9nt8-h7nd</a></td></tr>
+<tr><td>Community district tabulation areas</td><td class="m">71</td><td>NYC Dept. of City Planning</td><td class="m"><a href="https://data.cityofnewyork.us/d/xn3r-zk6y" target="_blank" rel="noopener">xn3r-zk6y</a></td></tr>
+<tr><td>Census tracts (2020)</td><td class="m">2,325</td><td>US Census Bureau / DCP</td><td class="m"><a href="https://data.cityofnewyork.us/d/63ge-mke6" target="_blank" rel="noopener">63ge-mke6</a></td></tr>
+<tr><td>ZIP code tabulation areas</td><td class="m">221</td><td>US Census Bureau</td><td class="m"><a href="https://data.cityofnewyork.us/d/35j5-n34v" target="_blank" rel="noopener">35j5-n34v</a></td></tr>
+<tr><td>Historic districts</td><td class="m">141</td><td>NYC Landmarks Preservation Commission</td><td class="m"><a href="https://data.cityofnewyork.us/d/skyk-mpzq" target="_blank" rel="noopener">skyk-mpzq</a></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h2>What was done to the data</h2>
+  <ul>
+    <li><b>Geometry was simplified.</b> Boundary outlines were thinned with <a href="https://github.com/mbloch/mapshaper" target="_blank" rel="noopener">mapshaper</a> (Visvalingam, 5–20% of vertices kept depending on how many shapes a layer has) so that thousands of polygons can load in the browser in under a second. Simplification keeps shapes and their topology but shifts edges by up to a few meters. <b>Do not read exact borders off this map.</b></li>
+    <li><b>Labels were generated programmatically.</b> Each area's label (e.g. <code>Precinct 1</code>, <code>Manhattan CB 7</code>, <code>Assembly District 66</code>) is built from the numeric code in the source file. Community-district codes above 18 are "joint interest areas" — parks and airports that belong to no community board — and are labeled as such.</li>
+    <li><b>Historic districts</b> are filtered to boundaries the Landmarks Preservation Commission marks as current; calendared and superseded study areas are dropped.</li>
+    <li><b>Nothing was added.</b> No boundary is drawn that isn't in a source file, and no attribute values were invented.</li>
+  </ul>
+
+  <div class="note">
+    This is a reference and comparison tool, not a system of record. For an authoritative answer to "which district is this address in," use the source agency or the city's <a href="https://gis.nyc.gov/taxmap/" target="_blank" rel="noopener">official lookups</a> — not a simplified map.</div>
+
+  <h2>Rebuilding it</h2>
+  <p>The whole pipeline is one script, <code>scripts/build.py</code>: it downloads each dataset's GeoJSON export, normalizes one label per feature, and writes a simplified file plus a <code>manifest.json</code> that drives the map's toggle panel. Layer definitions live in <code>scripts/layers.json</code>. Re-running the script picks up the latest published boundaries.</p>
+
+  <p style="margin-top:40px;font-size:13px;color:var(--ink-soft)">Built July 2026 · 21 layers · 8,503 individual district polygons.</p>
+</div>
+</body>
+</html>
