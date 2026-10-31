@@ -109,12 +109,12 @@
 
   /* ---------- search ---------- */
   .searchwrap{position:relative;margin-top:14px}
-  #search{width:100%;font-family:"Space Grotesk",sans-serif;font-size:13.5px;
+  #search, #searchB{width:100%;font-family:"Space Grotesk",sans-serif;font-size:13.5px;
     padding:10px 12px 10px 32px;border:1.4px solid var(--ink);border-radius:2px;
     background:var(--paper) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="%237a1f2b" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>') no-repeat 10px center;
     color:var(--ink);outline:none}
-  #search::placeholder{color:#9a927f}
-  #search:focus{border-color:var(--accent)}
+  #search::placeholder, #searchB::placeholder{color:#9a927f}
+  #search:focus, #searchB:focus{border-color:var(--accent)}
   .ac{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--panel);
     border:1.4px solid var(--ink);border-radius:2px;z-index:1400;max-height:280px;overflow-y:auto;
     box-shadow:0 8px 24px rgba(0,0,0,.18);display:none}
@@ -279,7 +279,7 @@ function fitHome(){
   if(!HOME) return;
   map.invalidateSize();
   // a pin restored from a shared link owns the view; otherwise fit the city
-  if(curPt) map.setView([curPt.lat,curPt.lng],13,{animate:false});
+  if(SLOT.A.pt || SLOT.B.pt) updateView();
   else map.fitBounds(HOME,{padding:[24,24]});
 }
 fetch('data/borough.json').then(r=>r.json()).then(gj=>{
